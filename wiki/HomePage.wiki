@@ -1,0 +1,11 @@
+= Introduction =
+
+HTCFlasher -formerly known as HERMflasher- is an open source tool which allows you to flash the ROM on most current HTC devices.
+
+
+= Features =
+
+HTCFlasher has some extra features that the original HTC RUU doesn't have:
+
+   * Present a serial prompt to the bootloader (replacing mtty)
+   * Flash and dump radio in raw format on MSM6xxx devices
