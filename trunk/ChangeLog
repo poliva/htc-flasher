@@ -1,0 +1,106 @@
+2007-05-18 17:09  pau
+
+	* main.c: remove unnecesary global var SHELL
+
+2007-05-18 12:50  pau
+
+	* flasher.c, io.c: fixed minor bugs in getChecksum() and fsend()
+	  functions.
+
+2007-05-17 13:37  pau
+
+	* flasher.c, hermes2.c, main.h: flasher.c: Added new function
+	  getChecksum(). Not used in flasher yet, but will probably be
+	  handy in the future to do Device & SPL version auto- detection by
+	  having known checksums & position of SPL flags.
+
+	  hermes2.c: added wdata return code when the cert is invalid.
+
+2007-05-17 04:16  pau
+
+	* TODO: Added todo file
+
+2007-05-17 04:06  pau
+
+	* hermes1.c, hermes2.c, main.c, main.h: try to fix the rbmc issues,
+	  no luck, i give out for now
+
+2007-05-16 21:42  pau
+
+	* Makefile, flasher.c, hermes1.c, main.c, main.h, utils.c: better
+	  handling of bootloader return values when querying device info,
+	  added some more things to query.
+
+2007-05-16 12:58  pau
+
+	* hermes1.c, main.c, main.h: changed params for rbmc function,
+	  still unfinished
+
+2007-05-16 10:12  pau
+
+	* COPYING: GPL license
+
+2007-05-16 01:09  pau
+
+	* flasher.c, main.c: fixed some problems with getting device info,
+	  still lots of work here
+
+2007-05-16 00:03  pau
+
+	* Makefile, decode.c, hermes1.c, hermes2.c, io.c, main.h, models.c:
+	  fixed compiler warnings
+
+2007-05-15 23:48  pau
+
+	* hermes1.c, hermes2.c: better handling of checksum error
+
+2007-05-15 18:25  pau
+
+	* flasher.c, hermes1.c, hermes2.c, main.c, main.h: make code more
+	  readable, put some comments...
+
+2007-05-15 15:40  pau
+
+	* crc32.c, decode.c, flasher.c, hermes1.c, hermes2.c, io.c, main.c,
+	  models.c, utils.c: changed all references to HERMFlasher to
+	  HTCflasher
+
+2007-05-15 14:04  pau
+
+	* README: Wrote README file
+
+2007-05-15 12:53  pau
+
+	* flasher.c, hermes1.c, io.c, main.c: Cosmetic changes, nothing
+	  really important.  Added dump NAND (rbmc) feature, needs more
+	  testing.
+
+2007-05-15 07:39  pau
+
+	* hermes1.c, hermes2.c: Flashing NBH on hermes2 now works on all
+	  the tests I've done.
+
+2007-05-15 06:20  pau
+
+	* hermes1.c, hermes2.c, io.c, main.c, main.h, models.c, utils.c: -
+	  fixed bug with USB port in opendev() - models changed to hermes1,
+	  hermes2, trinity - flashing NBH in hermes SPL2 works, still have
+	  a bug with the last checksum - other minor changes
+
+2007-05-15 02:59  pau
+
+	* Makefile, crc32.c, decode.c, flasher.c, hermes1.c, hermes2.c,
+	  io.c, main.c, main.h, models.c, utils.c: Added cvs id to all
+	  headers, created hermes2.c for hermes SPL versions with common
+	  base 1.51d (SPL >= 1.11) which will also be valid for trinity.
+
+2007-05-15 02:26  pau
+
+	* Makefile, README, crc32.c, decode.c, flasher.c, hermes1.c, io.c,
+	  main.c, main.h, models.c, utils.c: HTCFlasher
+
+2007-05-15 02:26  pau
+
+	* Makefile, README, crc32.c, decode.c, flasher.c, hermes1.c, io.c,
+	  main.c, main.h, models.c, utils.c: Initial revision
+
