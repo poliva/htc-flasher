@@ -10,11 +10,6 @@ all: ${OBJ}
 clean:
 	-rm -f ${OBJ} ${BIN}
 
-login:
-	export CVSROOT=":pserver:pau@s0.pofhq.net:/home/cvsroot"
-	cvs login
-
 commit:
-	cvs commit
-	cvs2cl
-
+	svn commit
+	svn2cl
