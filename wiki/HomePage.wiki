@@ -2,9 +2,13 @@
 
 HTCFlasher is a free (GPL'd) tool to work with HTC based bootloaders (SPLs).
 
+Use it with CARE. If you don't know what you're doing you can brick your  device. Keep in mind that future / untested bootloaders can break backward compatibility. USE IT AT YOUR OWN RISK.
+
+= Supported Devices =
+
 Currently most new HTC devices are supported, and the basic set of functions to work with every HTC bootloader has been implemented, so adding support for new bootloader versions or new devices should be quite easy to do, if not working out of the box.
 
-Use it with CARE. If you don't know what you're doing you can brick your  device. Keep in mind that future / untested bootloaders can break backward compatibility. USE IT AT YOUR OWN RISK.
+For an incomplete list, see [SupportedDevices].
 
 
 = Supported Operating Systems =
