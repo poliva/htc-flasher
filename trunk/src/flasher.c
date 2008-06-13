@@ -36,6 +36,7 @@ void ruustart()
 		printf(".");
 		fflush(stdout);
 	}
+	printf("done\n");
 
 	/* return DEBUG to normal state */
 	DEBUG=verbose;
