@@ -10,20 +10,30 @@
 # 
 
 ZEN="zenity --name=HTCFlasher --title=HTCFlasher"
-FLA="HTCFlasher"
 TMPF=/tmp/tmpfile.$$
 
 device="/dev/ttyUSB0"
+extracted=""
+flashed=""
+debug="NO"
+donate=""
+
+OPT1="Extract NBH file"
+OPT2="Flash NBH file"
+OPT3="Get device info"
+OPT4="Serial port"
+OPT5="Show debug info"
+OPT6="Donate                      "
 
 options() {
 
-	OPT1="Extract NBH file"
-	OPT2="Flash NBH file"
-	OPT3="Get device info"
-	OPT4="Change port [$device]"
-	OPT5="Donate :)"
+	FLA="./HTCFlasher -z"
 
-	ans=$($ZEN --width 500 --height 300 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" TRUE "$OPT1" FALSE "$OPT2" FALSE "$OPT3" FALSE "$OPT4" FALSE "$OPT5")
+	if [ "$debug" = "YES" ]; then 
+		FLA="$FLA -v"
+	fi
+
+	ans=$($ZEN --width 500 --height 330 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "$extracted" FALSE "$OPT2" "$flashed" FALSE "$OPT3" "$devinfo" FALSE "$OPT4" "[ $device ]" FALSE "$OPT5" "[ $debug ]" FALSE "$OPT6" "$donate")
 
 	if [ -z "$ans" ]; then
 		echo "bye :)"
@@ -35,9 +45,11 @@ options() {
 		if [ -z "$filename" ]; then
 			return 1
 		fi
-		$FLA -v -X "$filename" 2>&1 |tee $TMPF | $ZEN --progress --pulsate --auto-close --text="$OPT1" --width 400
-		cat $TMPF |egrep "(^\[\]|^\[\!)" | $ZEN --text-info --width 500 --height 430
+		$FLA -X "$filename" 2>&1 |tee $TMPF | $ZEN --progress --auto-close --text="$OPT1" --width 400
+		cat $TMPF |grep -v "^===" |grep -v "ZENITY" | $ZEN --text-info --width 500 --height 430
 		rm $TMPF
+		filename=$(basename $filename)
+		extracted="Extracted '$filename'"
 	fi
 
 	if [ "$ans" = "$OPT2" ]; then
@@ -45,16 +57,35 @@ options() {
 		if [ -z "$filename" ]; then
 			return 1
 		fi
-		$FLA -D $device -F $filename 2>&1 |tee $TMPF |$ZEN --progress --pulsate --auto-close --text="$OPT2, please wait..." --width 400
-	       	cat $TMPF |grep -v "\-\-\-\-\-" | $ZEN --text-info --width 500 --height 430
-		rm $TMPF
-		exit 0
+		$ZEN --question --text="Flash file '$filename'?"
+		if [ $? == 0 ]; then
+			$FLA -D $device -F $filename 2>&1 |tee $TMPF |$ZEN --progress --auto-close --text="$OPT2, please wait..." --width 400
+			cat $TMPF |grep -v "^===" |grep -v "ZENITY" | $ZEN --text-info --width 500 --height 430
+			rm $TMPF
+			filename=$(basename $filename)
+			flashed="Flashed '$filename'"
+		fi
 	fi
 
 	if [ "$ans" = "$OPT3" ]; then
-		$FLA -D $device -i 2>&1 |tee $TMPF | $ZEN --progress --pulsate --auto-close --text="$OPT3" --percentage=50 --width 400
-		cat $TMPF |grep -v "^===" |grep -v "^$" | $ZEN --text-info --width 400 --height 300
+		$FLA -D $device -i 2>&1 |tee $TMPF | $ZEN --progress --auto-close --text="$OPT3" --width 400
+		cat $TMPF |grep -v "^===" |grep -v "ZENITY" | $ZEN --text-info --width 400 --height 300
+		cid=$(cat $TMPF |grep "\[\] CID" |cut -f 3 -d " ")
+		modelid=$(cat $TMPF |grep "\[\] ModelID" |cut -f 3 -d " ")
 		rm $TMPF
+		devinfo=""
+                if [ -n "$cid" ] && [ -n "$modelid" ]; then
+                        devinfo="CID: [$cid] - ModelID: [$modelid]"
+                fi
+                if [ -n "$cid" ] && [ -z "$modelid" ]; then
+                        devinfo="CID: [$cid]"
+                fi
+                if [ -z "$cid" ] && [ -n "$modelid" ]; then
+                        devinfo="ModelID: [$modelid]"
+                fi
+		if [ -z "$devinfo" ]; then
+			devinfo="UNKNOWN DEVICE!"
+		fi
 	fi
 
 	if [ "$ans" = "$OPT4" ]; then
@@ -69,8 +100,18 @@ options() {
 	fi
 
 	if [ "$ans" = "$OPT5" ]; then
+		$ZEN --question --text="Enable verbose mode?"
+		if [ $? == 0 ]; then
+			debug="YES"
+		else
+			debug="NO"
+		fi
+	fi
+
+	if [ "$ans" = "$OPT6" ]; then
 		$ZEN --info --text="Opening PayPal donation page in Firefox\n\nThank you!"
 		firefox "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=pau%40eslack%2eorg&item_name=HTCFlasher%20donation&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8"
+		donate=":)"
 	fi
 }
 

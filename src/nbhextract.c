@@ -20,9 +20,9 @@ const char magicHeader2[]={'R','0','0','0','F','F','\n'};
 
 struct HTCIMAGEHEADER {
 	char device[32];
-	unsigned long sectiotypes[32];
-	unsigned long sectiooffsets[32];
-	unsigned long sectiolengths[32];
+	unsigned long sectiontypes[32];
+	unsigned long sectionoffsets[32];
+	unsigned long sectionlengths[32];
 	char CID[32];
 	char version[16];
 	char language[16];
@@ -122,6 +122,7 @@ void extractNBH(char *filename)
 	struct HTCIMAGEHEADER header;
 
 	/* NBH2DBH */
+	zenity(5);
 	input = fopen(filename,"rb");
 	if (input == NULL) {
 		fprintf(stderr, "[!!] Could not open '%s'\n", filename);
@@ -152,6 +153,7 @@ void extractNBH(char *filename)
 			printf("%02X", signature[i]);
 		printf("\n");
 	}
+	zenity(10);
 
 	output=fopen("tempfile.dbh","wb");
 	if (output == NULL) {
@@ -199,6 +201,7 @@ void extractNBH(char *filename)
 	}
 	fclose(output);
 	fclose(input);
+	zenity(30);
 
 	/* DBHExtract */
 	tmpfile = fopen("tempfile.dbh", "rb");
@@ -232,16 +235,21 @@ void extractNBH(char *filename)
 	printf("Version:  %s\n", header.version);
 	printf("Language: %s\n", header.language);
 	printf("\n");
+	zenity(50);
 
-	for (i = 0; i < (sizeof(header.sectiotypes) / sizeof(header.sectiotypes[0])); i++) {
-		if (header.sectiotypes[i]!=0) {
-			if (!extractNB(tmpfile, i, header.sectiotypes[i], header.sectiooffsets[i], header.sectiolengths[i]))
+	for (i = 0; i < (sizeof(header.sectiontypes) / sizeof(header.sectiontypes[0])); i++) {
+		if (i+50 < 95)
+			zenity(50+i);
+		if (header.sectiontypes[i]!=0) {
+			if (!extractNB(tmpfile, i, header.sectiontypes[i], header.sectionoffsets[i], header.sectionlengths[i]))
 				fprintf(stderr,"[!!] Error while extracting file %d\n", i);
 		}
 	}
 
+	zenity(95);
 	printf ("[] Done!\n");
 
 	fclose(tmpfile);
 	unlink("tempfile.dbh");
+	zenity(100);
 }

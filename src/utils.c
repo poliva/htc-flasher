@@ -62,6 +62,15 @@ char* parseHTCBlock()
 	return retbuf;
 }
 
+void zenity(int i)
+{
+	if (ZENITY) {
+		fflush(stdout);
+		fprintf (stderr,"%d ZENITY\n",i);
+		fflush(stdout);
+	}
+}
+
 /* progress - send progress command to SPL and display a nice bar */
 void progress(int pc)
 {
@@ -69,25 +78,28 @@ void progress(int pc)
 	int tmp, cols = 80;
 	char msg[100];
 
+	zenity(pc);
 	sprintf(msg, "progress %d", pc);
 	fsend(msg);
 
-	(pc < 0) ? pc = 0 : (pc > 100) ? pc = 100 : 0;
+	if (!ZENITY) {
+		(pc < 0) ? pc = 0 : (pc > 100) ? pc = 100 : 0;
 
-	printf("\e[K %3d%% [", pc);
+		printf("\e[K %3d%% [", pc);
 
-	if (columns)
-		cols = atoi(columns);
-	cols -= 10;
+		if (columns)
+			cols = atoi(columns);
+		cols -= 10;
 
-	for(tmp = (cols * pc) / 100; tmp; tmp--)
-		printf("#");
+		for(tmp = (cols * pc) / 100; tmp; tmp--)
+			printf("#");
 
-	for(tmp = cols - ((cols * pc) / 100); tmp; tmp--)
-		printf("-");
+		for(tmp = cols - ((cols * pc) / 100); tmp; tmp--)
+			printf("-");
 
-	printf("]\r");
-	fflush(stdout);
+		printf("]\r");
+		fflush(stdout);
+	}
 }
 
 /* hexdump - show hexdump output of the SPL response */

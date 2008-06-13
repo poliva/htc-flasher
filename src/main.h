@@ -7,12 +7,13 @@ extern int fd;
 extern char buf[BUFSIZE];
 extern char rec[REC];
 extern int DEBUG;
-extern int VERBOSE;
+extern int ZENITY;
 extern char *device;
 
 /* utils.c */
 int control_c(int sig);
 char* parseHTCBlock();
+void zenity(int i);
 void progress(int pc);
 void hexdump(size_t len, size_t width);
 
