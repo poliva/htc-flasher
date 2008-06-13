@@ -27,7 +27,7 @@ OPT6="Donate                      "
 
 options() {
 
-	FLA="./HTCFlasher -z"
+	FLA="HTCFlasher -z"
 
 	if [ "$debug" = "YES" ]; then 
 		FLA="$FLA -v"
