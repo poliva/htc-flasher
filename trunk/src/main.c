@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 			extract = 1;
 			break;
 		case 'D':
-			printf ("[] Using device '%s'\n",device);
 			device = optarg;
+			printf ("[] Using device '%s'\n",device);
 			break;
 		case 'F':
 			NBHfile = optarg;
