@@ -1,0 +1,80 @@
+#!/bin/bash
+#
+#  HTCFlasherGUI
+# 
+#  Copyright (C) 2007-2008 Pau Oliva Fora - <pof@eslack.org>
+#
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License version 3 as published
+#  by the Free Software Foundation.
+# 
+
+ZEN="zenity --name=HTCFlasher --title=HTCFlasher"
+FLA="HTCFlasher"
+TMPF=/tmp/tmpfile.$$
+
+device="/dev/ttyUSB0"
+
+options() {
+
+	OPT1="Extract NBH file"
+	OPT2="Flash NBH file"
+	OPT3="Get device info"
+	OPT4="Change port [$device]"
+	OPT5="Donate :)"
+
+	ans=$($ZEN --width 500 --height 300 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" TRUE "$OPT1" FALSE "$OPT2" FALSE "$OPT3" FALSE "$OPT4" FALSE "$OPT5")
+
+	if [ -z "$ans" ]; then
+		echo "bye :)"
+		exit 0
+	fi
+
+	if [ "$ans" = "$OPT1" ]; then
+		filename=$($ZEN --file-selection)
+		if [ -z "$filename" ]; then
+			return 1
+		fi
+		$FLA -v -X "$filename" 2>&1 |tee $TMPF | $ZEN --progress --pulsate --auto-close --text="$OPT1" --width 400
+		cat $TMPF |egrep "(^\[\]|^\[\!)" | $ZEN --text-info --width 500 --height 430
+		rm $TMPF
+	fi
+
+	if [ "$ans" = "$OPT2" ]; then
+		filename=$($ZEN --file-selection)
+		if [ -z "$filename" ]; then
+			return 1
+		fi
+		$FLA -D $device -F $filename 2>&1 |tee $TMPF |$ZEN --progress --pulsate --auto-close --text="$OPT2, please wait..." --width 400
+	       	cat $TMPF |grep -v "\-\-\-\-\-" | $ZEN --text-info --width 500 --height 430
+		rm $TMPF
+		exit 0
+	fi
+
+	if [ "$ans" = "$OPT3" ]; then
+		$FLA -D $device -i 2>&1 |tee $TMPF | $ZEN --progress --pulsate --auto-close --text="$OPT3" --percentage=50 --width 400
+		cat $TMPF |grep -v "^===" |grep -v "^$" | $ZEN --text-info --width 400 --height 300
+		rm $TMPF
+	fi
+
+	if [ "$ans" = "$OPT4" ]; then
+		oldport=$device
+		export device=$(zenity --entry --entry-text="$device" --text="Select serial port device to use")
+		if [ -z "$device" ]; then
+			device="$oldport"
+		fi
+		if [ ! -e "$device" ]; then
+			$ZEN --warning --text="Device '$device' doesn't exist"
+		fi
+	fi
+
+	if [ "$ans" = "$OPT5" ]; then
+		$ZEN --info --text="Opening PayPal donation page in Firefox\n\nThank you!"
+		firefox "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=pau%40eslack%2eorg&item_name=HTCFlasher%20donation&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8"
+	fi
+}
+
+while true
+do
+	options
+done
