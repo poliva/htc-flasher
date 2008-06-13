@@ -70,12 +70,18 @@ int blockresult()
 	char *CRC_ERROR =	"\x48\x54\x43\x53\x01\x80\x03\x00\x01\x00\x00\x00";
 	char *CERT_ERROR =	"\x48\x54\x43\x53\x02\x80\x06\x00\x00\x00\x00\x00";
 	char *MODELID_ERROR =	"\x48\x54\x43\x53\x02\x80\x05\x00\x01\x00\x00\x00";
+	char *PART_END =	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
 	int i;
 
 	for (i = 0; i < BUFSIZE; i++) {
 		if (!strcmp(&buf[i], BLOCK_OK)) {
 			if (DEBUG)
 				printf ("\n[] WDATA BLOCK RECEIVED OK\n");
+			return(0);
+		}
+		if (!strcmp(&buf[i], PART_END)) {
+			if (DEBUG)
+				printf ("\n[] NBH PART ENDED\n");
 			return(0);
 		}
 		if (!strcmp(&buf[i], UPDATE_END)) {
@@ -104,7 +110,7 @@ int blockresult()
 	}
 
 	/* unknown error */
-	printf("\n[!!] ERROR\n");
+	printf("\n[] SPL OUTPUT:\n");
 	if (!DEBUG)
 		hexdump(96, 16);
 	return(1);
