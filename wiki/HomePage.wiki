@@ -25,10 +25,7 @@ For an incomplete list, see [SupportedDevices].
   * Serial prompt: replaces mtty / minicom
   * Easy to use Gtk GUI
 
+
 = Screenshots =
 
-[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-HTCFlasher-1.png]
-
-[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-HTCFlasher-2.png]
-
-[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-HTCFlasher.png]
+See the [Screenshots Screenshots page]
