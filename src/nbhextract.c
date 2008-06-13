@@ -61,9 +61,10 @@ const char *getSectionName(unsigned long section)
 int bufferedReadWrite(FILE *input, FILE *output, unsigned long length)
 {
 	unsigned char data[2048];
-	unsigned long nread = length;
+	unsigned long nread;
 
 	while (length > 0) {
+		nread = length;
 		if (nread > sizeof(data))
 			nread = sizeof(data);
 		nread = fread(data, 1, nread, input);
