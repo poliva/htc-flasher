@@ -27,7 +27,7 @@ void opendev()
 	fd = open (device, O_RDWR | O_NOCTTY);
 	if (fd < 0) {
 		perror (device);
-		fprintf (stderr, "cannot connect to %s\n", device);
+		fprintf (stderr, "[!!] Can't connect to %s\n", device);
 		exit (1);
 	}
 
