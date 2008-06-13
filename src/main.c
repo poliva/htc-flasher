@@ -34,7 +34,7 @@ void help_show_message()
 {
         fprintf(stderr, "Usage: HTCFlasher [options]\n\n");
         fprintf(stderr, " options:\n");
-        fprintf(stderr, "    -X [fileanme]    extract NBH file contents\n");
+        fprintf(stderr, "    -X [filename]    extract NBH file contents\n");
         fprintf(stderr, "    -F [filename]    flash NBH file\n");
 	fprintf(stderr, "    -D [device]      use another serial device (default: %s)\n", device);
         fprintf(stderr, "    -i               get device info\n");
