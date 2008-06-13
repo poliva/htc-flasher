@@ -23,6 +23,7 @@ int fd;
 char buf[BUFSIZE];
 char rec[REC];
 int DEBUG;
+int ZENITY;
 #ifdef WIN32
 char *device = "\\\\.\\WCEUSBSH001";
 #else
@@ -61,7 +62,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	while ((c = getopt(argc, argv, "F:D:X:ipvh")) != -1) {
+	while ((c = getopt(argc, argv, "F:D:X:ipvhz")) != -1) {
 		switch(c) {
 		case 'X':
 			NBHfile = optarg;
@@ -88,6 +89,10 @@ int main(int argc, char **argv)
 		case 'p':
 			printf("[] Serial prompt: type 'quit' to exit.\n");
 			mtty = 1;
+			break;
+		case 'z':
+			ZENITY = 1;
+			zenity(0);
 			break;
 		case 'h':
 			help_show_message();

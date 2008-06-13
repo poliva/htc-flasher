@@ -20,14 +20,17 @@ void getinfo()
 {
 	char *result;
 
+	zenity(15);
 	send("info 2");
 	get();
+	zenity(30);
 	result = parseHTCBlock();
 	if (strlen(result) != 0)
 		printf("[] CID: %s\n", result);
-
+	zenity(50);
 	send("getdevinfo");
 	get();
+	zenity(75);
 	result = parseHTCBlock();
 	if (strlen(result) != 0)
 		printf("[] ModelID: %s\n", result);
@@ -36,6 +39,7 @@ void getinfo()
 		fsend("getdevinfo");
 		get();
 		result = parseHTCBlock();
+		zenity(85);
 		if (strlen(result) != 0)
 			printf("[] ModelID: %s\n", result);
 		else
@@ -47,4 +51,5 @@ void getinfo()
 		fsend("ResetDevice");
 		get();
 	}
+	zenity(100);
 }

@@ -37,6 +37,7 @@ void ruustart()
 		fflush(stdout);
 	}
 	printf("done\n");
+	fflush(stdout);
 
 	/* return DEBUG to normal state */
 	DEBUG=verbose;
@@ -181,13 +182,11 @@ int flashNBH (char *flashfile)
 
 	} while (totalread < fsize);
 
+	printf ("\nDone!\n");
 	progress(100);
 	sleep (1);
 	fsend("ResetDevice");
 	sleep (1);
-
 	close (fd2);
-	printf ("\nDone!\n");
-
 	return 0;
 }
