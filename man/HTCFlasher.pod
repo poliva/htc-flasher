@@ -56,7 +56,7 @@ Extract ROM contents from a NBH upgrade file:
 
 =head1 EXIT STATUS
 
-HTCFlasher returns a zero exist status if it succeeds to
+HTCFlasher returns a zero exit status if it succeeds to
 execute the command. Non zero is returned in case of failure.
 
 =head1 AUTHOR
