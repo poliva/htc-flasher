@@ -28,7 +28,7 @@ void opendev()
 	if (fd < 0) {
 		perror (device);
 		fprintf (stderr, "[!!] Can't connect to %s\n", device);
-		exit (1);
+		exit(1);
 	}
 
 	/* Get serial device parameters */
@@ -49,6 +49,12 @@ void opendev()
 
 	/* Set TCSANOW mode of serial device */
 	tcsetattr(fd, TCSANOW, &tc);
+
+        if (write(fd, "\r", 1) == -1) {
+		perror(device);
+		fprintf (stderr, "[!!] can't write to %s\n", device);
+		exit(1);
+	}
 }
 
 /* read_wait - block with timeout until file descriptor is readable */
