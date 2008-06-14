@@ -9,7 +9,7 @@
  *
  */
 
-unsigned long Crc32Table[256] =
+unsigned int Crc32Table[256] =
 {
 0x00000000,  0x77073096,  0xEE0E612C,  0x990951BA,  0x076DC419,  0x706AF48F,  0xE963A535,  0x9E6495A3,
 0x0EDB8832,  0x79DCB8A4,  0xE0D5E91E,  0x97D2D988,  0x09B64C2B,  0x7EB17CBD,  0xE7B82D07,  0x90BF1D91,
@@ -45,9 +45,9 @@ unsigned long Crc32Table[256] =
 0xB3667A2E,  0xC4614AB8,  0x5D681B02,  0x2A6F2B94,  0xB40BBE37,  0xC30C8EA1,  0x5A05DF1B,  0x2D02EF8D
 };
 
-unsigned long Crc32(const unsigned char *data, unsigned long size, unsigned long prev)
+unsigned int Crc32(const unsigned char *data, unsigned int size, unsigned int prev)
 {
-	unsigned long nCrc32 = prev;
+	unsigned int nCrc32 = prev;
 
 	while (size) {
 		nCrc32 = ((nCrc32) >> 8) ^ Crc32Table[(*data) ^ ((nCrc32) & 0x000000FF)];

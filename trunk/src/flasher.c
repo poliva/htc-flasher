@@ -120,7 +120,7 @@ int blockresult()
 /* flashNBH - flash a NBH file */
 int flashNBH (char *flashfile)
 {
-	unsigned long dataCrc;
+	unsigned int dataCrc;
 	unsigned int totalread;
 	unsigned int readlen;
 	unsigned int writelen;
@@ -160,7 +160,7 @@ int flashNBH (char *flashfile)
 
 		dataCrc = Crc32(nbhbuffer, lps, 0);
 
-		sprintf(command,"wdata %x %lx", lps, dataCrc);
+		sprintf(command,"wdata %x %x", lps, dataCrc);
 		fsend(command);
 		rsend("HTCS");
 
