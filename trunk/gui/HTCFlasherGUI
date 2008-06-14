@@ -93,7 +93,10 @@ options() {
 	fi
 
 	if [ "$ans" = "$OPT4" ]; then
-		$TERMINAL "HTCFlasher -D $device -p"
+		$TERMINAL "HTCFlasher -D $device -p ; read -p 'Press enter to close.'"
+		if [ $? != 0 ]; then
+			$ZEN --warning --text="TERMINAL is not properly set"
+		fi
 	fi
 
 	if [ "$ans" = "$OPT5" ]; then
