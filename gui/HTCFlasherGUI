@@ -10,6 +10,9 @@
 # 
 
 ZEN="zenity --name=HTCFlasher --title=HTCFlasher"
+TERMINAL="xterm -T HTCFlasher -e"
+#TERMINAL="gnome-terminal --hide-menubar --title=HTCFlasher -e"
+
 TMPF=/tmp/tmpfile.$$
 
 device="/dev/ttyUSB0"
@@ -21,9 +24,10 @@ donate=""
 OPT1="Extract NBH file"
 OPT2="Flash NBH file"
 OPT3="Get device info"
-OPT4="Serial port"
-OPT5="Show debug info"
-OPT6="Donate                      "
+OPT4="Bootloader Cmd prompt"
+OPT5="Serial port"
+OPT6="Show debug info"
+OPT7="Donate                      "
 
 options() {
 
@@ -33,7 +37,7 @@ options() {
 		FLA="$FLA -v"
 	fi
 
-	ans=$($ZEN --width 500 --height 330 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "$extracted" FALSE "$OPT2" "$flashed" FALSE "$OPT3" "$devinfo" FALSE "$OPT4" "[ $device ]" FALSE "$OPT5" "[ $debug ]" FALSE "$OPT6" "$donate")
+	ans=$($ZEN --width 500 --height 340 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "$extracted" FALSE "$OPT2" "$flashed" FALSE "$OPT3" "$devinfo" FALSE "$OPT4" "" FALSE "$OPT5" "[ $device ]" FALSE "$OPT6" "[ $debug ]" FALSE "$OPT7" "$donate")
 
 	if [ -z "$ans" ]; then
 		echo "bye :)"
@@ -89,6 +93,10 @@ options() {
 	fi
 
 	if [ "$ans" = "$OPT4" ]; then
+		$TERMINAL "HTCFlasher -D $device -p"
+	fi
+
+	if [ "$ans" = "$OPT5" ]; then
 		oldport=$device
 		export device=$(zenity --entry --entry-text="$device" --text="Select serial port device to use")
 		if [ -z "$device" ]; then
@@ -99,7 +107,7 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT5" ]; then
+	if [ "$ans" = "$OPT6" ]; then
 		$ZEN --question --text="Enable verbose mode?"
 		if [ $? == 0 ]; then
 			debug="YES"
@@ -108,7 +116,7 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT6" ]; then
+	if [ "$ans" = "$OPT7" ]; then
 		$ZEN --info --text="Opening PayPal donation page in Firefox\n\nThank you!"
 		firefox "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=pau%40eslack%2eorg&item_name=HTCFlasher%20donation&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8"
 		donate=":)"
