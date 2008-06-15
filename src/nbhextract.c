@@ -18,6 +18,13 @@
 unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
 const char magicHeader2[]={'R','0','0','0','F','F','\n'};
 
+static unsigned char bmphead[54] = {
+	0x42, 0x4d, 0x36, 0x84, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00,
+       	0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0xf0, 0x00, 0x00, 0x00, 0x40, 0x01,
+       	0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x84,
+       	0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
 struct HTCIMAGEHEADER {
 	char device[32];
 	unsigned long sectiontypes[32];
@@ -77,6 +84,74 @@ int bufferedReadWrite(FILE *input, FILE *output, unsigned long length)
 	return 1;
 }
 
+/* convertBMP - converts a NB splash screen to a bitmap */
+int convertBMP(FILE *input, int index, unsigned long type, unsigned long start, unsigned long len)
+{
+	/* FIXME: image size is hardcoded */
+	FILE *output;
+	int biWidth = 240;
+	int biHeight = 320;
+	int y,x;
+	char filename[1024];
+	unsigned long dataLen = biWidth * biHeight * 2;
+	unsigned char *data[dataLen];
+	unsigned char colors[3];
+	unsigned short encoded;
+
+	sprintf(filename, "%02d_%s_0x%03lx.bmp", index, getSectionName(type), type);
+	printf("[] Encoding: %s\n", filename);
+
+	if (len < dataLen) {
+		fprintf(stderr, "[!!] Invalid size\n");
+		return 0;
+	}
+
+	if (fseek(input, start, SEEK_SET) != 0) {
+		fprintf(stderr, "[!!] Could not move to start of image\n");
+		return 0;
+	}
+
+	if (fread(data, 1, dataLen, input) != dataLen) {
+		fprintf(stderr, "[!!] Could not read full image\n");
+		return 0;
+	}
+
+	output=fopen(filename,"wb");
+	if (output == NULL) {
+		fprintf(stderr, "[!!] Could not open '%s'\n", filename);
+		return 0;
+	}
+
+	if (fwrite(bmphead, 1, sizeof(bmphead), output) != sizeof(bmphead)) {
+		fprintf(stderr, "[!!] Could not write bitmap header\n");
+		fclose(output);
+		return 0;
+	}
+
+	for (y=0; y < biHeight; y++) {
+		for (x=0; x < biWidth; x++) {
+			encoded = ((unsigned short *)data)[((biHeight-(y+1))*biWidth)+x];
+			colors[0] = (encoded << 3) & 0xF8;
+			colors[1] = (encoded >> 3) & 0xFC;
+			colors[2] = (encoded >> 8) & 0xF8;
+			fwrite(colors, 1, 3, output);
+		}
+	}
+
+	fclose(output);
+	return 1;
+}
+
+/* isSectionImage - returns true if section type is splash screen */
+int isSectionImage(unsigned long type)
+{
+	if (type == 0x600)
+		return 1;
+	if (type == 0x601)
+		return 1;
+	return 0;
+}
+
 /* extractNB - extract NB files from NBH */
 int extractNB(FILE *input, int index, unsigned long type, unsigned long start, unsigned long len)
 {
@@ -84,7 +159,7 @@ int extractNB(FILE *input, int index, unsigned long type, unsigned long start, u
 	char filename[1024];
 	FILE *output;
 
-	sprintf(filename, "%02d_%s.nb", index, getSectionName(type));
+	sprintf(filename, "%02d_%s_0x%03lx.nb", index, getSectionName(type), type);
 	printf("[] Extracting: %s\n", filename);
 
 	output = fopen(filename, "wb");
@@ -100,6 +175,9 @@ int extractNB(FILE *input, int index, unsigned long type, unsigned long start, u
 		fprintf(stderr, "[!!] Could not read complete file\n");
 
 	fclose(output);
+
+	if (isSectionImage(type))
+		convertBMP(input, index, type, start, len);
 
 	return retval;
 }
