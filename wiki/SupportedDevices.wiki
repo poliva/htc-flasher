@@ -1,6 +1,6 @@
 = List of supported devices =
 
-HTCflasher has been tested on the following devices:
+HTCflasher has been tested on the following PocketPC devices:
 
   * HTC Hermes: works on SPL versions >= 2.x
   * HTC Trinity: works on all SPL versions
@@ -10,6 +10,10 @@ HTCflasher has been tested on the following devices:
   * HTC Elf: works on all SPL versions
   * HTC Artemis: works on all SPL versions
   * HTC Nike: works on all SPL versions
+
+HTCflasher has been tested on the following Smartphone devices:
+
+  * HTC Vox: works on all SPL versions
 
 Not tested, but know to work on:
 
@@ -24,9 +28,9 @@ Not tested, but know to work on:
   * HTC Juno
   * HTC Sedna
 
-Also should work on Smartphone platform:
+Smartphone platform:
 
- * Excalibur, Monet, Oxygen, Vox, Wings, Cavalier, etc...
+ * Excalibur, Monet, Oxygen, Wings, Cavalier, etc...
 
 *Can it be used in other new devices?*
 
