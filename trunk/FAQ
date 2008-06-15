@@ -4,7 +4,7 @@ Q1. HTCFlasher version 2.0 was able to flash Hermes 1.x bootloaders.
 A1. The Hermes was the first HTC device to use NBH in ROM format, the
     Hermes 1.x SPL was a transition from old NBF to new NBH commands
     and it has already been deprected by HTC. You should seriously
-    considere upgrading your SPL to a newer version.
+    consider upgrading your SPL to a newer version.
 
 
 Q2. HTCFlasher version 2.0 was able to flash RAW radio ROM accessing
