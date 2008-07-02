@@ -21,7 +21,7 @@ void ruustart()
 {
 	int i, verbose;
 	char *ruustart="ruustart\r";
-	char cmd[1];
+	char cmd[2];
 
 	verbose = DEBUG;
 	DEBUG = 0;
