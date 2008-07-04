@@ -140,4 +140,3 @@ void hexdump(size_t len, size_t width)
                 pos += width;
         }
 }
-
