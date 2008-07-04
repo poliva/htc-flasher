@@ -78,7 +78,32 @@ Generate a NBH file containing only a Splash Screen, valid for any HTC Kaiser de
 
 Generate a NBH file containing a GSM radio firmware, an SPL, a Splash Screen and a WinCE OS image, valid for HTC Shift devices with CID HTC__017:
 
-          HTCFlasher -v -F RUU_signed.nbh -t 0x301,0x200,0x600,0x400 -f GSM.nb,SPL.nb,Splash.nb,OS.nb -s 64 -d CLIO10000 -c HTC__017 -v 1.30.453.0 -l USA
+          yang -F RUU_signed.nbh -t 0x301,0x200,0x600,0x400 -f GSM.nb,SPL.nb,Splash.nb,OS.nb -s 64 -d CLIO10000 -c HTC__017 -v 1.30.453.0 -l USA
+
+Generate a NBH file containing IPL, SPL, MainSplash, GSM, OS and unknown(0x800) files, for HTC Excalibur device:
+
+	yang -F RUU_signed.nbh -f 00_IPL_0x100.nb,01_SPL_0x200.nb,02_MainSplash_0x600.nb,03_GSM_0x300.nb,04_OS_0x400.nb,05_unknown_0x800.nb -t 0x100,0x200,0x600,0x300,0x400,0x800 -s 1024 -d EXCA20000 -c HTC__001 -v 1.11.405.4 -l ENG
+
+	=== yang v1.0: Yet Another NBH Generator
+	=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers
+
+	[] Output NBH file: RUU_unsigned.nbh
+	[] Input files: 00_IPL_0x100.nb,01_SPL_0x200.nb,02_MainSplash_0x600.nb,03_GSM_0x300.nb,04_OS_0x400.nb,05_unknown_0x800.nb
+	[] Input types: 0x100,0x200,0x600,0x300,0x400,0x800
+	[] SignMaxChunkSize: 1024
+	[] Device: EXCA20000
+	[] CID: HTC__001
+	[] Version: 1.11.405.4
+	[] Language: ENG
+
+	[] 0x100 --> 00_IPL_0x100.nb
+	[] 0x200 --> 01_SPL_0x200.nb
+	[] 0x600 --> 02_MainSplash_0x600.nb
+	[] 0x300 --> 03_GSM_0x300.nb
+	[] 0x400 --> 04_OS_0x400.nb
+	[] 0x800 --> 05_unknown_0x800.nb
+
+	Done!
 
 =head1 EXIT STATUS
 

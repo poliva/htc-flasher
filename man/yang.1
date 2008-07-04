@@ -128,8 +128,8 @@
 .rm #[ #] #H #V #F C
 .\" ========================================================================
 .\"
-.IX Title "yang 1"
-.TH yang 1 "2008-07-04" "yang v1.0" "User Commands"
+.IX Title "YANG 1"
+.TH YANG 1 "2008-07-04" "yang v1.0" "User commands"
 .SH "NAME"
 yant \- Yet Another NBH Generator
 .SH "SYNOPSIS"
@@ -206,7 +206,42 @@ Generate a \s-1NBH\s0 file containing only a Splash Screen, valid for any \s-1HT
 Generate a \s-1NBH\s0 file containing a \s-1GSM\s0 radio firmware, an \s-1SPL\s0, a Splash Screen and a WinCE \s-1OS\s0 image, valid for \s-1HTC\s0 Shift devices with \s-1CID\s0 HTC_\|_017:
 .PP
 .Vb 1
-\&          HTCFlasher \-v \-F RUU_signed.nbh \-t 0x301,0x200,0x600,0x400 \-f GSM.nb,SPL.nb,Splash.nb,OS.nb \-s 64 \-d CLIO10000 \-c HTC__017 \-v 1.30.453.0 \-l USA
+\&          yang \-F RUU_signed.nbh \-t 0x301,0x200,0x600,0x400 \-f GSM.nb,SPL.nb,Splash.nb,OS.nb \-s 64 \-d CLIO10000 \-c HTC__017 \-v 1.30.453.0 \-l USA
+.Ve
+.PP
+Generate a \s-1NBH\s0 file containing \s-1IPL\s0, \s-1SPL\s0, MainSplash, \s-1GSM\s0, \s-1OS\s0 and unknown(0x800) files, for \s-1HTC\s0 Excalibur device:
+.PP
+.Vb 1
+\&        yang \-F RUU_signed.nbh \-f 00_IPL_0x100.nb,01_SPL_0x200.nb,02_MainSplash_0x600.nb,03_GSM_0x300.nb,04_OS_0x400.nb,05_unknown_0x800.nb \-t 0x100,0x200,0x600,0x300,0x400,0x800 \-s 1024 \-d EXCA20000 \-c HTC__001 \-v 1.11.405.4 \-l ENG
+.Ve
+.PP
+.Vb 2
+\&        === yang v1.0: Yet Another NBH Generator
+\&        === (c) 2008 Pau Oliva Fora \- pof @ XDA\-Developers
+.Ve
+.PP
+.Vb 8
+\&        [] Output NBH file: RUU_unsigned.nbh
+\&        [] Input files: 00_IPL_0x100.nb,01_SPL_0x200.nb,02_MainSplash_0x600.nb,03_GSM_0x300.nb,04_OS_0x400.nb,05_unknown_0x800.nb
+\&        [] Input types: 0x100,0x200,0x600,0x300,0x400,0x800
+\&        [] SignMaxChunkSize: 1024
+\&        [] Device: EXCA20000
+\&        [] CID: HTC__001
+\&        [] Version: 1.11.405.4
+\&        [] Language: ENG
+.Ve
+.PP
+.Vb 6
+\&        [] 0x100 \-\-> 00_IPL_0x100.nb
+\&        [] 0x200 \-\-> 01_SPL_0x200.nb
+\&        [] 0x600 \-\-> 02_MainSplash_0x600.nb
+\&        [] 0x300 \-\-> 03_GSM_0x300.nb
+\&        [] 0x400 \-\-> 04_OS_0x400.nb
+\&        [] 0x800 \-\-> 05_unknown_0x800.nb
+.Ve
+.PP
+.Vb 1
+\&        Done!
 .Ve
 .SH "EXIT STATUS"
 .IX Header "EXIT STATUS"
@@ -221,7 +256,7 @@ Please report bugs here:
 http://code.google.com/p/htc\-flasher/issues/list
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-Copyright © 2008 Pau Oliva Fora.  License GPLv3+: \s-1GNU\s0 \s-1GPL\s0 version 3 or later <http://gnu.org/licenses/gpl.html>
+Copyright (c) 2008 Pau Oliva Fora.  License GPLv3+: \s-1GNU\s0 \s-1GPL\s0 version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.  There is \s-1NO\s0 \s-1WARRANTY\s0, to the extent permitted by law.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
