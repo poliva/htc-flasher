@@ -1,6 +1,6 @@
 /* 
  * HTCFlasher - http://htc-flasher.googlecode.com
-
+ *
  * YANG: Yet Another NBH Generator
  * Copyright (C) 2008 Pau Oliva Fora - pof @ <eslack.org>
  *
@@ -16,7 +16,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <getopt.h>
-#include "main.h"
+#include "nbh.h"
 
 unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
 const char magicHeader2[]={'R','0','0','0','F','F','\n'};
@@ -32,25 +32,6 @@ struct HTCIMAGEHEADER {
 	char language[16];
 };
 struct HTCIMAGEHEADER HTCIMAGEHEADER;
-
-int bufferedReadWrite(FILE *input, FILE *output, unsigned long length)
-{
-	unsigned char data[2048];
-	unsigned long nread;
-
-	while (length > 0) {
-		nread = length;
-		if (nread > sizeof(data))
-			nread = sizeof(data);
-		nread = fread(data, 1, nread, input);
-		if (!nread)
-			return 0;
-		if (fwrite(data, 1, nread, output) != nread)
-			return 0;
-		length -= nread;
-	}
-	return 1;
-}
 
 void help_show_message()
 {
