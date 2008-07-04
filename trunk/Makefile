@@ -2,6 +2,7 @@ all:
 	cd src && ${MAKE} all
 install:
 	cp src/HTCFlasher /usr/bin/
+	cp src/yang /usr/bin/
 	cp gui/HTCFlasherGUI /usr/bin/
 	cp htcflasher.desktop /usr/share/applications/
 	install -m 444 man/HTCFlasher.1 /usr/share/man/man1/

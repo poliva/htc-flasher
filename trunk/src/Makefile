@@ -5,6 +5,7 @@ CFLAGS=-Wall
 
 all: ${OBJ}
 	${CC} ${OBJ} -o ${BIN}
+	${CC} yang.c -o yang
 
 clean:
-	-rm -f ${OBJ} ${BIN}
+	-rm -f ${OBJ} ${BIN} yang
