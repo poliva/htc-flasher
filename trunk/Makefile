@@ -7,5 +7,6 @@ install:
 	cp htcflasher.desktop /usr/share/applications/
 	install -m 444 man/HTCFlasher.1 /usr/share/man/man1/
 	install -m 444 man/HTCFlasherGUI.1 /usr/share/man/man1/
+	install -m 444 man/yang.1 /usr/share/man/man1/
 clean:
 	cd src && ${MAKE} clean
