@@ -1,11 +1,12 @@
-/* 
- * HTCFlasher
+/*
+ * HTCFlasher - http://htc-flasher.googlecode.com
  *
- * Copyright (C) 2007-2008 Pau Oliva Fora - <pof@eslack.org>
+ * Copyright (C) 2008 Pau Oliva Fora - pof @ <eslack.org>
  *
  * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 3 as published
- * by the Free Software Foundation.
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 3 of the License, or (at your
+ * opinion) any later version. See <http://www.gnu.org/licenses/gpl.html>
  *
  */
 

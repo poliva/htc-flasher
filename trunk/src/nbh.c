@@ -12,9 +12,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include "main.h"
 
-/* bufferedReadWrite - dump rom file parts */
+/* bufferedReadWrite - read from input file, write on output file */
 int bufferedReadWrite(FILE *input, FILE *output, unsigned long length)
 {
 	unsigned char data[2048];
