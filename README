@@ -79,5 +79,6 @@
 
     * Flash NBH files: replaces the Windows Rom Upgrade Utility (RUU)
     * Extract NBH files: replaces windows tools like nbhextract
+    * Create NBH files: using 'yang' (Yet Another NBH generator)
     * Serial prompt: replaces mtty / minicom
 
