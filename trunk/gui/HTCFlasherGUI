@@ -23,12 +23,13 @@ debug="NO"
 donate=""
 
 OPT1="Extract NBH file"
-OPT2="Flash NBH file"
-OPT3="Get device info"
-OPT4="Bootloader Cmd prompt"
-OPT5="Serial port"
-OPT6="Show debug info"
-OPT7="Donate                      "
+OPT2="Generate NBH file"
+OPT3="Flash NBH file"
+OPT4="Get device info"
+OPT5="Bootloader Cmd prompt"
+OPT6="Serial port"
+OPT7="Show debug info"
+OPT8="Donate                      "
 
 options() {
 
@@ -38,7 +39,7 @@ options() {
 		FLA="$FLA -v"
 	fi
 
-	ans=$($ZEN --width 500 --height 340 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "$extracted" FALSE "$OPT2" "$flashed" FALSE "$OPT3" "$devinfo" FALSE "$OPT4" "" FALSE "$OPT5" "[ $device ]" FALSE "$OPT6" "[ $debug ]" FALSE "$OPT7" "$donate")
+	ans=$($ZEN --width 500 --height 360 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "" FALSE "$OPT2" "$generated" FALSE "$OPT3" "$flashed" FALSE "$OPT4" "$devinfo" FALSE "$OPT5" "" FALSE "$OPT6" "[ $device ]" FALSE "$OPT7" "[ $debug ]" FALSE "$OPT8" "$donate")
 
 	if [ -z "$ans" ]; then
 		echo "bye :)"
@@ -58,13 +59,17 @@ options() {
 	fi
 
 	if [ "$ans" = "$OPT2" ]; then
+		yangGUI
+	fi
+
+	if [ "$ans" = "$OPT3" ]; then
 		filename=$($ZEN --file-selection)
 		if [ -z "$filename" ]; then
 			return 1
 		fi
 		$ZEN --question --text="Flash file '$filename'?"
 		if [ $? == 0 ]; then
-			(( $FLA -D $device -F "$filename" 3>&2 2>&1 1>&3 |tee ) 3>&2 2>&1 1>&3 ) 2>&1 |tee $TMPF |$ZEN --progress --auto-close --text="$OPT2, please wait..." --width 400
+			(( $FLA -D $device -F "$filename" 3>&2 2>&1 1>&3 |tee ) 3>&2 2>&1 1>&3 ) 2>&1 |tee $TMPF |$ZEN --progress --auto-close --text="$OPT3, please wait..." --width 400
 			cat $TMPF |grep -v "^===" |grep -v "ZENITY" | $ZEN --text-info --width 500 --height 430
 			rm $TMPF
 			filename=$(basename $filename)
@@ -72,8 +77,8 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT3" ]; then
-		(( $FLA -D "$device" -i 3>&2 2>&1 1>&3 |tee ) 3>&2 2>&1 1>&3 ) 2>&1 |tee $TMPF | $ZEN --progress --auto-close --text="$OPT3" --width 400
+	if [ "$ans" = "$OPT4" ]; then
+		(( $FLA -D "$device" -i 3>&2 2>&1 1>&3 |tee ) 3>&2 2>&1 1>&3 ) 2>&1 |tee $TMPF | $ZEN --progress --auto-close --text="$OPT4" --width 400
 		cat $TMPF |grep -v "^===" |grep -v "ZENITY" | $ZEN --text-info --width 400 --height 300
 		cid=$(cat $TMPF |grep "\[\] CID" |cut -f 3 -d " ")
 		modelid=$(cat $TMPF |grep "\[\] ModelID" |cut -f 3 -d " ")
@@ -93,14 +98,14 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT4" ]; then
+	if [ "$ans" = "$OPT5" ]; then
 		$TERMINAL "HTCFlasher -D $device -p ; read -p 'Press enter to close.'"
 		if [ $? != 0 ]; then
 			$ZEN --warning --text="TERMINAL is not properly set"
 		fi
 	fi
 
-	if [ "$ans" = "$OPT5" ]; then
+	if [ "$ans" = "$OPT6" ]; then
 		oldport=$device
 		export device=$(zenity --entry --entry-text="$device" --text="Select serial port device to use")
 		if [ -z "$device" ]; then
@@ -111,7 +116,7 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT6" ]; then
+	if [ "$ans" = "$OPT7" ]; then
 		$ZEN --question --text="Enable verbose mode?"
 		if [ $? == 0 ]; then
 			debug="YES"
@@ -120,7 +125,7 @@ options() {
 		fi
 	fi
 
-	if [ "$ans" = "$OPT7" ]; then
+	if [ "$ans" = "$OPT8" ]; then
 		$ZEN --info --text="Opening PayPal donation page in Firefox\n\nThank you!"
 		firefox "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=pau%40eslack%2eorg&item_name=HTCFlasher%20donation&no_shipping=1&cn=Comments&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8"
 		donate=":)"
