@@ -1,6 +1,6 @@
 =head1 NAME
 
-yant - Yet Another NBH Generator
+yang - Yet Another NBH Generator
 
 =head1 SYNOPSIS
 
@@ -37,10 +37,10 @@ file size. Try both values (64 and 1024) and see which one matches your
 device.
 
 B<-d> Device name or Model ID. This should match the one on your device,
-again extract a shipped NBH or use the Get Device Info option from HTCFlasher.
+again extract a shipped NBH or use the Get Device Info option from HTCFlasher(1).
 
 B<-c> This should match the CID on your device, again extract a shipped NBH
-or use the Get Device Info option from HTCFlasher.
+or use the Get Device Info option from HTCFlasher(1).
 
 B<-v> This is just a version number field. You can put whatever you want here.
 
