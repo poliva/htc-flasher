@@ -11,3 +11,13 @@
 *Flash NBH file*
 
 [http://pof.eslack.org/HTC/HTCFlasher/Screenshot-HTCFlasher.png]
+
+= yangGUI Screenshots =
+
+*Generate NBH file (1/2)*
+
+[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-YANG.png]
+
+*Generate NBH file (2/2)*
+
+[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-YANG-1.png]
