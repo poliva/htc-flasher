@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 			nbfiles = optarg;
 			printf("[] Input files: %s\n", nbfiles);
 			break;
-		case't':
+		case 't':
 			types = optarg;
 			printf("[] Input types: %s\n", types);
 			break;
