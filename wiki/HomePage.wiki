@@ -22,6 +22,7 @@ For an incomplete list, see [SupportedDevices].
 
   * Flash NBH files: replaces the Windows Rom Upgrade Utility (RUU)
   * Extract NBH files: replaces windows tools like nbhextract
+  * Generate NBH files using YANG: Yet Another NBH Generator
   * Convert splash screens to BMP
   * Serial prompt: replaces mtty / minicom
   * Easy to use Gtk GUI
@@ -43,6 +44,23 @@ Usage: HTCFlasher [options]
     -p               enter serial prompt (minicom/mtty like)
     -v               verbose mode
     -h               shows this help message
+}}}
+
+{{{
+=== yang v1.0: Yet Another NBH Generator
+=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers
+
+Usage: yang [options]
+
+ options:
+    -F [filename]       Output NBH filename
+    -f [file1,file2...] Comma separated list of input NB files
+    -t [type1,type2...] Comma separated list of input NB types
+    -s [chunksize]      SignMaxChunkSize (64 or 1024)
+    -d [device]         Device name (Model ID)
+    -c [CID]            CID field
+    -v [version]        Version number
+    -l [language]       Language
 }}}
 
 
