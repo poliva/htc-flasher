@@ -17,6 +17,7 @@ install:
 clean:
 	cd src && ${MAKE} clean
 	cd RomKitchen && ${MAKE} clean
+remove:
 	rm /usr/bin/HTCFlasher
 	rm /usr/bin/HTCFlasherGUI
 	rm /usr/bin/yang
