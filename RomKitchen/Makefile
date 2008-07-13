@@ -1,5 +1,5 @@
 CC?=gcc
-CFLAGS=-Wall
+CFLAGS=-m32 -Wall
 
 all:
 	${CC} dsmbuild.c -o dsmbuild ${CFLAGS}
