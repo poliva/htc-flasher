@@ -10,6 +10,7 @@ install:
 	cp RomKitchen/sofbuild /usr/bin/
 	cp RomKitchen/dsminfo /usr/bin/
 	cp RomKitchen/nbimg /usr/bin/
+	cp RomKitchen/nbsplit /usr/bin/
 	cp htcflasher.desktop /usr/share/applications/
 	cp yang.desktop /usr/share/applications/
 	install -m 444 man/HTCFlasher.1 /usr/share/man/man1/
@@ -27,6 +28,7 @@ remove:
 	rm /usr/bin/dsminfo
 	rm /usr/bin/sofbuild
 	rm /usr/bin/nbimg
+	rm /usr/bin/nbsplit
 	rm /usr/share/applications/htcflasher.desktop
 	rm /usr/share/applications/yang.desktop
 	rm /usr/share/man/man1/HTCFlasher.1
