@@ -1,0 +1,129 @@
+#!/bin/bash
+#
+#  Linux Rom Kitchen Extract script
+#
+#  Copyright (C) 2007-2008 Pau Oliva Fora - <pof@eslack.org>
+#
+#  This program is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU General Public License as published by the
+#  Free Software Foundation; either version 3 of the License, or (at your
+#  opinion) any later version. See <http://www.gnu.org/licenses/gpl.html>
+#
+
+TOOLS="/usr/share/LinuxRomKitchen/"
+CURRENTDIR=`pwd`
+
+if [ -z $1 ]; then
+	echo "USAGE: lrk-extract <OS.nb>"
+	exit 1
+fi
+
+if ! [ -e $TOOLS ]; then
+	echo "ERROR: $TOOLS does not exist"
+	exit 1
+fi
+
+if [ "`which wine`" = "" ]; then
+	echo "ERROR: wine is not installed"
+	exit 1
+fi
+
+if [ "`which dsminfo`" = "" ]; then
+	echo "ERROR: dsminfo is not installed"
+	echo "Hint: Make sure you have installed latest version of htc-flasher"
+	exit 1
+fi
+
+if [ "`which nbsplit`" = "" ]; then
+	echo "ERROR: nbsplit is not installed"
+	echo "Hint: Make sure you have installed latest version of htc-flasher"
+	exit 1
+fi
+
+if [ -e ROM ]; then
+	echo "ERROR: ROM folder already exists, please delete it first"
+	exit 1
+fi
+
+if [ -e SYS ]; then
+	echo "ERROR: SYS folder already exists, please delete it first"
+	exit 1
+fi
+
+echo "Preparing..."
+rm -rf ~/.lrk/ 2>/dev/null
+mkdir -p ~/.lrk/Temp/
+cp $1 ~/.lrk/Temp/OS.nb
+cd ~/.lrk/Temp
+
+nbsplit -kaiser ./OS.nb |tee log.dump 2>/dev/null
+wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin |tee log.dump 2>/dev/null
+wine $TOOLS/ImgfsToDump.exe imgfs.bin |tee log.dump 2>/dev/null
+mv dump dump_imgfs
+
+if [ $? != 0 ]; then
+	echo "ERROR: can't create imgfs dump"
+	exit 1
+fi
+
+wine $TOOLS/RomMaster.exe -x -w 5 -b 0x320000 OS.nb.payload -o xip.bin
+mkdir XIP
+wine $TOOLS/dumprom.exe xip.bin -5 -d XIP
+mv dump dump_xip
+
+if [ $? != 0 ]; then
+	echo "ERROR: can't create XIP dump"
+	exit 1
+fi
+
+cd XIP
+#Access is Denied workaround
+find ../dump_xip/ -type d |xargs -n 1 basename |xargs -n 1 rm 2>/dev/null
+mv * ../dump_xip/
+cd ..
+rm -rf XIP
+
+### CopyROMXIP
+cp -R dump_xip/* dump_imgfs/
+mkdir ROM
+mv OS.nb ROM/
+mv dump_xip XIP
+mv XIP ROM/
+
+if [ $? != 0 ]; then
+	echo "ERROR: can't copy ROM XIP"
+	exit 1
+fi
+
+# BuildOS
+echo "Building OS packages in SYS folder, please wait"
+cd dump_imgfs
+for f in `ls *.dsm` ; do
+	dsminfo $f > $f.dsminfo
+	len=`cat $f.dsminfo |wc -l`
+	PKGNAME=`cat $f.dsminfo |head -n 1 |cut -f 2 -d " "`
+	mkdir -p "../SYS/$PKGNAME"
+	for i in `seq 2 $len`; do
+		file=`cat $f.dsminfo |head -n $i |tail -n 1`
+		mv "$file" "../SYS/$PKGNAME/"
+	done
+	mv $f "../SYS/$PKGNAME/"
+	rm $f.dsminfo
+done
+
+if [ $? != 0 ]; then
+	echo "ERROR: ROM package creation failed"
+	exit 1
+fi
+
+cd ..
+
+echo "Cleaning up..."
+mv SYS ROM "$CURRENTDIR"
+cd "$CURRENTDIR"
+rm -rf ~/.lrk/ 2>/dev/null
+
+echo "Done!"
+
+# if you want to edit initflashfiles:
+#gedit SYS/OEM_Lang_0409/initflashfiles.dat
