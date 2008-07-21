@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
 
 	if (verbose) {
 		printf("StructSize:   %ld\n", header.StructSize);
-		printf("PackageVersion:   %ld\n", header.PackageVersion);
-		printf("PrevPkgVersion:   %ld\n", header.PrevPkgVersion);
+		printf("PackageVersion:   %d.%d.%d.%d\n", header.PackageVersion1,header.PackageVersion2,header.PackageVersion3,header.PackageVersion4);
+		printf("PrevPkgVersion:   %d.%d.%d.%d\n", header.PrevPkgVersion1,header.PrevPkgVersion2,header.PrevPkgVersion3,header.PrevPkgVersion4);
 		printf("ProcessorID:   %ld\n", header.ProcessorID);
 		printf("OSVersion:   %ld\n", header.OSVersion);
 		printf("PlatformID:   %ld\n", header.PlatformID);

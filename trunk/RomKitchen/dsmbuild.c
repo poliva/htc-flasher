@@ -69,8 +69,14 @@ int main(int argc, char **argv) {
 	header.FileListOffset=header.StructSize;
 	header.CERTData=0;
 	header.CERTDataOffset=0;
-	header.PackageVersion=0;
-	header.PrevPkgVersion=0;
+	header.PackageVersion1=0;
+	header.PackageVersion2=0;
+	header.PackageVersion3=0;
+	header.PackageVersion4=0;
+	header.PrevPkgVersion1=0;
+	header.PrevPkgVersion2=0;
+	header.PrevPkgVersion3=0;
+	header.PrevPkgVersion4=0;
 
 
 	d = opendir(folder);
