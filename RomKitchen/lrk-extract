@@ -13,52 +13,58 @@
 TOOLS="/usr/share/LinuxRomKitchen/"
 CURRENTDIR=`pwd`
 
+if ! [ -f $HOME/.lrk/NBSPLITOPTS ]; then
+	echo "-kaiser" > $HOME/.lrk/NBSPLITOPTS
+fi
+NBSPLITOPTS=`cat ~/.lrk/NBSPLITOPTS`
+
+
 if [ -z $1 ]; then
-	echo "USAGE: lrk-extract <OS.nb>"
+	echo "USAGE: lrk-extract <OS.nb> [Part01.raw] [Part02.raw]"
 	exit 1
 fi
 
-if ! [ -e $TOOLS ]; then
-	echo "ERROR: $TOOLS does not exist"
+# check that no SYS & ROM exist in CURRENTDIR
+
+if [ -d SYS ]; then
+	echo "ERROR: SYS folder already exists in $CURRENTDIR"
 	exit 1
 fi
 
-if [ "`which wine`" = "" ]; then
-	echo "ERROR: wine is not installed"
-	exit 1
-fi
-
-if [ "`which dsminfo`" = "" ]; then
-	echo "ERROR: dsminfo is not installed"
-	echo "Hint: Make sure you have installed latest version of htc-flasher"
-	exit 1
-fi
-
-if [ "`which nbsplit`" = "" ]; then
-	echo "ERROR: nbsplit is not installed"
-	echo "Hint: Make sure you have installed latest version of htc-flasher"
-	exit 1
-fi
-
-if [ -e ROM ]; then
-	echo "ERROR: ROM folder already exists, please delete it first"
-	exit 1
-fi
-
-if [ -e SYS ]; then
-	echo "ERROR: SYS folder already exists, please delete it first"
+if [ -d ROM ]; then
+	echo "ERROR: ROM folder already exists in $CURRENTDIR"
 	exit 1
 fi
 
 echo "Preparing..."
-rm -rf ~/.lrk/ 2>/dev/null
+rm -rf ~/.lrk/Temp/ 2>/dev/null
 mkdir -p ~/.lrk/Temp/
 cp $1 ~/.lrk/Temp/OS.nb
+
+if [ $? != 0 ]; then
+	echo "ERROR: Can't copy $1"
+	exit 1
+fi
+
 cd ~/.lrk/Temp
 
-nbsplit -kaiser ./OS.nb |tee log.dump 2>/dev/null
-wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin |tee log.dump 2>/dev/null
-wine $TOOLS/ImgfsToDump.exe imgfs.bin |tee log.dump 2>/dev/null
+if ! [ -z $2 ]; then
+	cp $2 ~/.lrk/xip.bin
+	cp $3 ~/.lrk/imgfs.bin
+else
+	if [ $NBSPLITOPTS != "-athena" ]; then
+		nbsplit $NBSPLITOPTS ./OS.nb |tee log.dump
+		if [ $? != 0 ]; then
+			echo "ERROR: NBSplit failed, check that nbplit options are correct in kitchen preferences"
+			exit 1
+		fi
+	else
+		cp ./OS.nb ./OS.nb.payload
+	fi
+	wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin >> log.dump
+fi
+
+wine $TOOLS/ImgfsToDump.exe imgfs.bin >> log.dump
 mv dump dump_imgfs
 
 if [ $? != 0 ]; then
@@ -66,7 +72,10 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
-wine $TOOLS/RomMaster.exe -x -w 5 -b 0x320000 OS.nb.payload -o xip.bin
+if [ -z $2 ]; then
+	wine $TOOLS/RomMaster.exe -x -w 5 -b 0x320000 OS.nb.payload -o xip.bin
+fi
+
 mkdir XIP
 wine $TOOLS/dumprom.exe xip.bin -5 -d XIP
 mv dump dump_xip
@@ -95,9 +104,21 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
+# extracting registry hives
+echo "Extracting registry hives"
+cd dump_imgfs
+rm -rf ~/.lrk/reg/ 2>/dev/null
+mkdir -p ~/.lrk/reg/
+export _FLATRELEASEDIR=.
+wine $TOOLS/rgucomp.exe -nologo -o default.hv > ~/.lrk/reg/default.txt
+wine $TOOLS/rgucomp.exe -nologo -o user.hv > ~/.lrk/reg/user.txt
+wine $TOOLS/rgucomp.exe -nologo -o boot.hv > ~/.lrk/reg/boot.txt
+dos2unix ~/.lrk/reg/*
+dos2unix ~/.lrk/reg/*
+
 # BuildOS
 echo "Building OS packages in SYS folder, please wait"
-cd dump_imgfs
+#cd dump_imgfs
 for f in `ls *.dsm` ; do
 	dsminfo $f > $f.dsminfo
 	len=`cat $f.dsminfo |wc -l`
@@ -116,14 +137,46 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
+
 cd ..
+
+# generating rom info
+echo "Generating rom info, please wait"
+echo "[Core OS]" > ~/.lrk/rominfo.txt
+echo "  Windows Mobile-based Pocket PCs" >> ~/.lrk/rominfo.txt
+echo >> ~/.lrk/rominfo.txt
+echo "[Versions]" >> ~/.lrk/rominfo.txt
+ROMVERSION=`cat ./SYS/OEMVERSION/mxipupdate_*.provxml  |grep  ROMVersion |awk '{print $4}' |cut -f 2 -d '"' |head -n 1`
+if ! [ -z $ROMVERSION ]; then
+	echo "  ROM:   $ROMVERSION" >> ~/.lrk/rominfo.txt
+fi
+for f  in `find ./SYS/ -iname "*.dsm" |grep -v OEM |grep -v NetCF` ; do dsminfo $f -v |grep PackageVersion |grep -v "0.0.0.0" |sed -e "s/PackageVersion/  SYS/g"; done |sort -u >> ~/.lrk/rominfo.txt
+for f  in `find ./SYS/NetCF/ -iname "*.dsm"` ; do dsminfo $f -v |grep PackageVersion |grep -v "0.0.0.0" |sed -e "s/PackageVersion/  NET/g"; done |sort -u >> ~/.lrk/rominfo.txt
+for f  in `find ./SYS/OEM*/ -iname "*.dsm"` ; do dsminfo $f -v |grep PackageVersion |grep -v "0.0.0.0" |sed -e "s/PackageVersion/  OEM/g"; done |sort -u >> ~/.lrk/rominfo.txt
+echo >> ~/.lrk/rominfo.txt
+echo "[Language]" >> ~/.lrk/rominfo.txt
+LANG=`ls ./SYS/ |grep "_Lang_....$" |rev |cut -c 1-4 |rev |sort -u`
+if [ $LANG = "0409" ]; then
+	LANG="$LANG - English (United States)"
+fi
+echo "  $LANG"  >> ~/.lrk/rominfo.txt
+echo >> ~/.lrk/rominfo.txt
+echo "[DPI]" >> ~/.lrk/rominfo.txt
+DPI=`ls ./SYS/ |grep DPI |grep -vi res |rev |cut -f 1 -d "_" |rev |sort -u`
+echo "  $DPI"  >> ~/.lrk/rominfo.txt
+
 
 echo "Cleaning up..."
 mv SYS ROM "$CURRENTDIR"
 cd "$CURRENTDIR"
-rm -rf ~/.lrk/ 2>/dev/null
+rm -rf ~/.lrk/Temp/ 2>/dev/null
+
+# convert initflashfiles to text
+INFF=`ls $CURRENTDIR/SYS/OEM_Lang_*/initflashfiles.dat`
+if [ -z $INFF ]; then
+	echo "ERROR: Initflashfiles not found"
+	exit 1
+fi
+iconv -f utf16 -t iso-8859-15 $INFF > ~/.lrk/initflashfiles.txt
 
 echo "Done!"
-
-# if you want to edit initflashfiles:
-#gedit SYS/OEM_Lang_0409/initflashfiles.dat

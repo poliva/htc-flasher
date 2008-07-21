@@ -11,6 +11,15 @@ install:
 	cp RomKitchen/dsminfo /usr/bin/
 	cp RomKitchen/nbimg /usr/bin/
 	cp RomKitchen/nbsplit /usr/bin/
+	cp RomKitchen/lrk /usr/bin/
+	cp RomKitchen/lrk-extract /usr/bin/
+	cp RomKitchen/lrk-build /usr/bin/
+	mkdir -p /usr/share/LinuxRomKitchen/
+	cp RomKitchen/lrk-packages /usr/share/LinuxRomKitchen/
+	cp RomKitchen/lrk-scripts /usr/share/LinuxRomKitchen/
+	cp RomKitchen/lrk-preload /usr/share/LinuxRomKitchen/
+	cp RomKitchen/lrk.svg /usr/share/LinuxRomKitchen/
+	cp RomKitchen/inff.end /usr/share/LinuxRomKitchen/
 	cp htcflasher.desktop /usr/share/applications/
 	cp yang.desktop /usr/share/applications/
 	install -m 444 man/HTCFlasher.1 /usr/share/man/man1/

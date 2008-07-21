@@ -24,9 +24,15 @@ struct DeviceManifestHeader
   unsigned long FileListOffset; // How many bytes from the front of file to the first FileEntry.
   unsigned long CERTData; // number of bytes of digital certificate data
   unsigned long CERTDataOffset; // How many bytes from the front of file to the certificate data.
-  unsigned long PackageVersion; // Version of this package
-  unsigned long PrevPkgVersion; // Version of package that this package updates. (0) for Canonical
-  char unknown[16];
+  short PackageVersion1; // Version of this package
+  short PackageVersion2; // Version of this package
+  short PackageVersion4; // Version of this package
+  short PackageVersion3; // Version of this package
+  short PrevPkgVersion1; // Version of package that this package updates. (0) for Canonical
+  short PrevPkgVersion2; // Version of package that this package updates. (0) for Canonical
+  short PrevPkgVersion4; // Version of package that this package updates. (0) for Canonical
+  short PrevPkgVersion3; // Version of package that this package updates. (0) for Canonical
+  char unknown[8];
   char guidPackage[16]; // GUID of this package
   char unknown2[16];
 };
