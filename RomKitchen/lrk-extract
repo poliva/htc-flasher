@@ -118,15 +118,25 @@ dos2unix ~/.lrk/reg/*
 
 # BuildOS
 echo "Building OS packages in SYS folder, please wait"
-#cd dump_imgfs
+echo "[Core OS]" > ~/.lrk/rominfo.txt
+echo "  Windows Mobile-based Pocket PCs" >> ~/.lrk/rominfo.txt
+echo >> ~/.lrk/rominfo.txt
+echo "[Missing Files]" >> ~/.lrk/rominfo.txt
 for f in `ls *.dsm` ; do
 	dsminfo $f > $f.dsminfo
 	len=`cat $f.dsminfo |wc -l`
 	PKGNAME=`cat $f.dsminfo |head -n 1 |cut -f 2 -d " "`
+	#echo "Processing $PKGNAME - $f"
 	mkdir -p "../SYS/$PKGNAME"
+	if [ $len -gt 50 ]; then
+		sleep 1 # to avoid cat broken pipe
+	fi
 	for i in `seq 2 $len`; do
 		file=`cat $f.dsminfo |head -n $i |tail -n 1`
-		mv "$file" "../SYS/$PKGNAME/"
+		mv "$file" "../SYS/$PKGNAME/" 2>/dev/null
+		if [ $? != 0 ]; then
+			echo "  $PKGNAME: $file" >> ~/.lrk/rominfo.txt
+		fi
 	done
 	mv $f "../SYS/$PKGNAME/"
 	rm $f.dsminfo
@@ -137,16 +147,15 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
-
 cd ..
 
 # generating rom info
-echo "Generating rom info, please wait"
-echo "[Core OS]" > ~/.lrk/rominfo.txt
-echo "  Windows Mobile-based Pocket PCs" >> ~/.lrk/rominfo.txt
 echo >> ~/.lrk/rominfo.txt
+echo "Generating rom info, please wait"
 echo "[Versions]" >> ~/.lrk/rominfo.txt
-ROMVERSION=`cat ./SYS/OEMVERSION/mxipupdate_*.provxml  |grep  ROMVersion |awk '{print $4}' |cut -f 2 -d '"' |head -n 1`
+### find romversion in provxml file
+OEMVERSIONFILE=`find ./SYS/OEM* -iname "mxipupdate_OEMVERSION*"`
+ROMVERSION=`cat $OEMVERSIONFILE |grep -i ROMVersion |sed -e 's/.*value="//g' |cut -f 1 -d '"' |head -n 1`
 if ! [ -z $ROMVERSION ]; then
 	echo "  ROM:   $ROMVERSION" >> ~/.lrk/rominfo.txt
 fi
