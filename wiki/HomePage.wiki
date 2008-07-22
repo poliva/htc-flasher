@@ -1,69 +1,26 @@
 = HTCFlasher =
 
-HTCFlasher is a free (GPL'd) tool to work with HTC based bootloaders (SPLs).
+*HTCFlasher* -formerly known as HERMflasher- is an open source tool which allows you to flash ROMs on most current HTC devices. It has some extra features that the original HTC RUU doesn't have, like for example it can present a serial prompt to the bootloader (replacing mtty), or it can dump NBH file contents (.nb ROM parts).
 
-Use it with CARE. If you don't know what you're doing you can brick your  device. Keep in mind that future / untested bootloaders can break backward compatibility. USE IT AT YOUR OWN RISK.
-
-= Supported Devices =
-
-Currently most new HTC devices are supported, and the basic set of functions to work with every HTC bootloader has been implemented, so adding support for new bootloader versions or new devices should be quite easy to do, if not working out of the box.
-
-For an incomplete list, see [SupportedDevices].
+ * [HTCFlasher HTCFlasher wiki page]
 
 
-= Supported Operating Systems =
+= YANG =
 
-  * GNU/Linux x86 and x86_64
-  * Win32/Cygwin (except Vista)
-  * Mac OS X (intel based)
+*YANG* is Yet Another NBH Generator. A tool that allows you to generate custom NBH files out of ROM parts (.nb) files. You can choose the CID, ModelID, Language, etc. and also adjust the NBH signature size, thus making valid NBHs for all HTC devices. You need a way to flash custom/cooked ROMs (ie: HardSPL, USPL, SSPL, JumpSPL, etc...) to flash NBH files generated with YANG.
 
-
-= Features =
-
-  * Flash NBH files: replaces the Windows Rom Upgrade Utility (RUU)
-  * Extract NBH files: replaces windows tools like nbhextract
-  * Generate NBH files using YANG: Yet Another NBH Generator
-  * Convert splash screens to BMP
-  * Serial prompt: replaces mtty / minicom
-  * Easy to use Gtk GUI
-
-= Comand Line Mode =
-
-{{{
-=== HTCflasher v3.0
-=== Open source RUU for HTC devices
-=== (c) 2007-2008 Pau Oliva Fora
-
-Usage: HTCFlasher [options]
-
- options:
-    -X [filename]    extract NBH file contents
-    -F [filename]    flash NBH file
-    -D [device]      use another serial device (default: /dev/ttyUSB0)
-    -i               get device info
-    -p               enter serial prompt (minicom/mtty like)
-    -v               verbose mode
-    -h               shows this help message
-}}}
-
-{{{
-=== yang v1.0: Yet Another NBH Generator
-=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers
-
-Usage: yang [options]
-
- options:
-    -F [filename]       Output NBH filename
-    -f [file1,file2...] Comma separated list of input NB files
-    -t [type1,type2...] Comma separated list of input NB types
-    -s [chunksize]      SignMaxChunkSize (64 or 1024)
-    -d [device]         Device name (Model ID)
-    -c [CID]            CID field
-    -v [version]        Version number
-    -l [language]       Language
-}}}
+ * [YANG YANG wiki page]
 
 
-= GUI Mode Screenshots =
+= NBIMG =
 
-See the [Screenshots Screenshots page]
+*nbimg* is a tool to convert NB splash screens to BMP images, it can also do the reverse, convert BMP images to NB splash screens. It can work with any resolution, and supports HTC PocketPC and Smartphone splash screen formats. This tool is command line only, I have not written a GUI for it yet.
+
+ * [NBIMG NBIMG wiki page]
+
+
+= Linux ROM Kitchen =
+
+*Linux ROM Kitchen* is a tool that allows you to cook your own Windows Mobile ROMs for HTC Windows Mobile devices. This means you can extract the contents of a Shipped or Dumped ROM, and add/remove files or Packages into the ROM. 
+
+ * [Linux_ROM_Kitchen Linux ROM Kitchen wiki page]
