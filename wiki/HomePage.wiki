@@ -12,15 +12,15 @@
  * [YANG YANG wiki page]
 
 
-= NBIMG =
-
-*nbimg* is a tool to convert NB splash screens to BMP images, it can also do the reverse, convert BMP images to NB splash screens. It can work with any resolution, and supports HTC PocketPC and Smartphone splash screen formats. This tool is command line only, I have not written a GUI for it yet.
-
- * [NBIMG NBIMG wiki page]
-
-
 = Linux ROM Kitchen =
 
 *Linux ROM Kitchen* is a tool that allows you to cook your own Windows Mobile ROMs for HTC Windows Mobile devices. This means you can extract the contents of a Shipped or Dumped ROM, and add/remove files or Packages into the ROM. 
 
  * [Linux_ROM_Kitchen Linux ROM Kitchen wiki page]
+
+
+= NBIMG =
+
+*nbimg* is a tool to convert NB splash screens to BMP images, it can also do the reverse, convert BMP images to NB splash screens. It can work with any resolution, and supports HTC PocketPC and Smartphone splash screen formats. This tool is command line only, I have not written a GUI for it yet.
+
+ * [NBIMG NBIMG wiki page]
