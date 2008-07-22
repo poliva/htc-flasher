@@ -26,3 +26,8 @@ Use it with CARE. If you don't know what you're doing you can brick your device.
 To show the basic usage of LRK, I have created a SWF video showing how to cook a ROM, it is available here:
 
         http://www.eslack.org/pof/LRK/
+
+
+= Linux ROM Kitchen Screenshots =
+
+[http://pof.eslack.org/HTC/HTCFlasher/Screenshot-LRK1.png]
