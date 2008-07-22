@@ -77,6 +77,7 @@ fi
 #fi
 
 #if initflashfiles.dat has been edited with LRK, fix it
+###### TODO: This is br0ken... will fix it later
 size=`du -b $INFF |cut -f 1`
 dd if=$INFF of=$INFF.END bs=1 skip=$(($size - 4)) count=4
 FLAG=`hexdump $INFF.END |head -n 1 |cut -f 2 -d " "`
@@ -146,6 +147,10 @@ cd dump
 cp -R $CURRENTDIR/ROM/XIP/* .
 for f in `/bin/ls "$CURRENTDIR/SYS/"` ; do
 	cp -R $CURRENTDIR/SYS/${f}/* .
+	#fix for Metadata/.hst
+	if [ $f = "Metadata" ]; then
+		cp $CURRENTDIR/SYS/${f}/.hst .
+	fi
 done
 # same for custom packages, but folder names usually contain spaces...
 echo "Adding custom packages to dump folder..."
