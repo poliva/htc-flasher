@@ -1,0 +1,69 @@
+= HTCFlasher =
+
+HTCFlasher is a free (GPL'd) tool to work with HTC based bootloaders (SPLs).
+
+Use it with CARE. If you don't know what you're doing you can brick your  device. Keep in mind that future / untested bootloaders can break backward compatibility. USE IT AT YOUR OWN RISK.
+
+= Supported Devices =
+
+Currently most new HTC devices are supported, and the basic set of functions to work with every HTC bootloader has been implemented, so adding support for new bootloader versions or new devices should be quite easy to do, if not working out of the box.
+
+For an incomplete list, see [SupportedDevices].
+
+
+= Supported Operating Systems =
+
+  * GNU/Linux x86 and x86_64
+  * Win32/Cygwin (except Vista)
+  * Mac OS X (intel based)
+
+
+= Features =
+
+  * Flash NBH files: replaces the Windows Rom Upgrade Utility (RUU)
+  * Extract NBH files: replaces windows tools like nbhextract
+  * Generate NBH files using YANG: Yet Another NBH Generator
+  * Convert splash screens to BMP
+  * Serial prompt: replaces mtty / minicom
+  * Easy to use Gtk GUI
+
+= Comand Line Mode =
+
+{{{
+=== HTCflasher v3.0
+=== Open source RUU for HTC devices
+=== (c) 2007-2008 Pau Oliva Fora
+
+Usage: HTCFlasher [options]
+
+ options:
+    -X [filename]    extract NBH file contents
+    -F [filename]    flash NBH file
+    -D [device]      use another serial device (default: /dev/ttyUSB0)
+    -i               get device info
+    -p               enter serial prompt (minicom/mtty like)
+    -v               verbose mode
+    -h               shows this help message
+}}}
+
+{{{
+=== yang v1.0: Yet Another NBH Generator
+=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers
+
+Usage: yang [options]
+
+ options:
+    -F [filename]       Output NBH filename
+    -f [file1,file2...] Comma separated list of input NB files
+    -t [type1,type2...] Comma separated list of input NB types
+    -s [chunksize]      SignMaxChunkSize (64 or 1024)
+    -d [device]         Device name (Model ID)
+    -c [CID]            CID field
+    -v [version]        Version number
+    -l [language]       Language
+}}}
+
+
+= GUI Mode Screenshots =
+
+See the [Screenshots Screenshots page]
