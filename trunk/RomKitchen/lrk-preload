@@ -13,7 +13,7 @@
 export VERSION=1.0
 
 TOOLS="/usr/share/LinuxRomKitchen"
-APPS="$TOOLS/rgucomp.exe $TOOLS/ImgfsFromNb.exe $TOOLS/ImgfsFromDump.exe $TOOLS/ImgfsToNb.exe $TOOLS/NBMerge.exe $TOOLS/RomMaster.exe $TOOLS/dumprom.exe $TOOLS/cereg400.dll $TOOLS/cecompr_nt.dll"
+APPS="$TOOLS/rgucomp.exe $TOOLS/ImgfsFromDump.exe $TOOLS/ImgfsToNb.exe $TOOLS/ImgfsToDump.exe $TOOLS/NBMerge.exe $TOOLS/RomMaster.exe $TOOLS/dumprom.exe $TOOLS/cereg400.dll $TOOLS/cecompr_nt.dll"
 
 ZENITY=`which zenity`
 GTKDIALOG=""
@@ -100,6 +100,12 @@ fi
 
 if [ "`which nbsplit`" = "" ]; then
 	error "ERROR: nbsplit is not installed
+Hint: Make sure you have installed latest version of htc-flasher"
+	exit 1
+fi
+
+if [ "`which ImgfsFromNb`" = "" ]; then
+	error "ERROR: ImgfsFromNb is not installed
 Hint: Make sure you have installed latest version of htc-flasher"
 	exit 1
 fi
