@@ -192,7 +192,8 @@ if [ $NBSPLITOPTS != "-athena" ]; then
 else
 	cp ./OS.nb ./OS.nb.payload
 fi
-wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin >> log.dump
+#wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin >> log.dump
+ImgfsFromNb OS.nb.payload imgfs.bin >> log.dump
 wine $TOOLS/ImgfsFromDump.exe imgfs.bin imgfs-new.bin >> log.dump
 wine $TOOLS/ImgfsToNb.exe imgfs-new.bin os.nb.payload os-new.nb.payload >> log.dump
 if [ $NBSPLITOPTS != "-athena" ]; then

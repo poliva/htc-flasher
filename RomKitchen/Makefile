@@ -7,6 +7,7 @@ all:
 	${CC} sofbuild.c -o sofbuild ${CFLAGS}
 	${CC} nbimg.c -o nbimg ${CFLAGS}
 	${CC} nbsplit.c -o nbsplit ${CFLAGS}
+	${CC} ImgfsFromNb.c -o ImgfsFromNb ${CFLAGS}
 
 install:
 	cp dsmbuild /usr/bin/
@@ -14,6 +15,7 @@ install:
 	cp dsminfo /usr/bin/
 	cp nbimg /usr/bin/
 	cp nbsplit /usr/bin/
+	cp ImgfsFromNb /usr/bin/
 	cp lrk /usr/bin/
 	cp lrk-extract /usr/bin/
 	cp lrk-build /usr/bin/
@@ -25,7 +27,7 @@ install:
 	cp inff.end /usr/share/LinuxRomKitchen/
 
 clean:
-	-rm -f dsmbuild dsminfo sofbuild nbimg nbsplit
+	-rm -f dsmbuild dsminfo sofbuild nbimg nbsplit ImgfsFromNb
 
 remove:
 	rm /usr/bin/dsmbuild
@@ -33,6 +35,7 @@ remove:
 	rm /usr/bin/sofbuild
 	rm /usr/bin/nbimg
 	rm /usr/bin/nbsplit
+	rm /usr/bin/ImgfsFromNb
 	rm /usr/bin/lrk
 	rm /usr/bin/lrk-extract
 	rm /usr/bin/lrk-build
