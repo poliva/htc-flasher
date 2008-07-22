@@ -61,7 +61,6 @@ else
 	else
 		cp ./OS.nb ./OS.nb.payload
 	fi
-	#wine $TOOLS/ImgfsFromNb.exe OS.nb.payload imgfs.bin >> log.dump
 	ImgfsFromNb OS.nb.payload imgfs.bin >> log.dump
 fi
 
