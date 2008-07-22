@@ -70,7 +70,9 @@ fi
 
 for app in $APPS ; do
 	if ! [ -e $app ]; then
-		error "ERROR: $app does not exist"
+		error "ERROR: LRK-tools is not installed!
+Download from http://www.eslack.org/pof/LRK/LRK-tools.tgz
+Copy the contents to $TOOLS"
 		exit 1
 	fi
 done
