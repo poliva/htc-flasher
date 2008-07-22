@@ -93,7 +93,7 @@ cd ..
 rm -rf XIP
 
 ### CopyROMXIP
-cp -R dump_xip/* dump_imgfs/
+cp -R dump_xip/* dump_imgfs/ 2>/dev/null
 mkdir ROM
 mv OS.nb ROM/
 mv dump_xip XIP
@@ -181,7 +181,7 @@ cd "$CURRENTDIR"
 rm -rf ~/.lrk/Temp/ 2>/dev/null
 
 # convert initflashfiles to text
-INFF=`ls $CURRENTDIR/SYS/OEM_Lang_*/initflashfiles.dat`
+INFF=`find ${CURRENTDIR}/SYS/OEM* -iname "initflashfiles.dat"`
 if [ -z $INFF ]; then
 	echo "ERROR: Initflashfiles not found"
 	exit 1
