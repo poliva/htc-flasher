@@ -24,7 +24,7 @@ case $1 in
 		mkdir -p ~/LRK/NBH/
 		cabextract "$2" -d ~/LRK/NBH/ > ~/.lrk/lrk.log 2>&1
 		cd ~/LRK/NBH/
-		rm *.dll *.exe *.fig *.cfg *.doc 2>/dev/null
+		rm *.dll *.exe *.fig *.cfg *.doc *.DLL *.EXE *.FIG *.CFG *.DOC 2>/dev/null
 	;;
 	"-osnbextract")
 		echo "Extracting ROM Contents from `basename $2`"
