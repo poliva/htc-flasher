@@ -142,6 +142,10 @@ for f in `ls *.dsm` ; do
 	rm $f.dsminfo
 done
 
+# special packages
+mv .ROM ../SYS/
+mv .VM ../SYS/
+
 if [ $? != 0 ]; then
 	echo "ERROR: ROM package creation failed"
 	exit 1

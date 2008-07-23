@@ -139,6 +139,13 @@ for f in `/bin/ls "$CURRENTDIR/SYS/"` ; do
 		cp $CURRENTDIR/SYS/${f}/.hst .
 	fi
 done
+
+# special
+mkdir .VM
+mkdir .ROM
+cp -R $CURRENTDIR/SYS/.VM/* .VM/
+cp -R $CURRENTDIR/SYS/.ROM/* .ROM/
+
 # same for custom packages, but folder names usually contain spaces...
 echo "Adding custom packages to dump folder..."
 LEN=`cat ~/.lrk/pkginst.txt |wc -l`
