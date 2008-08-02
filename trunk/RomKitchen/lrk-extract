@@ -74,6 +74,9 @@ fi
 
 if [ -z $2 ]; then
 	wine $TOOLS/RomMaster.exe -x -w 5 -b 0x320000 OS.nb.payload -o xip.bin
+	if ! [ -e xip.bin ]; then
+		wine $TOOLS/RomMaster.exe -x -w 5 -b 0x310000 OS.nb.payload -o xip.bin
+	fi
 fi
 
 mkdir XIP
@@ -169,9 +172,33 @@ for f  in `find ./SYS/OEM*/ -iname "*.dsm"` ; do dsminfo $f -v |grep PackageVers
 echo >> ~/.lrk/rominfo.txt
 echo "[Language]" >> ~/.lrk/rominfo.txt
 LANG=`ls ./SYS/ |grep "_Lang_....$" |rev |cut -c 1-4 |rev |sort -u`
-if [ $LANG = "0409" ]; then
-	LANG="$LANG - English (United States)"
-fi
+case $LANG in
+	"0409") LANG="$LANG - WWE English (United States)" ;;
+	"0804") LANG="$LANG - CHS Chinese Simplified" ;;
+	"0404") LANG="$LANG - CHT Chinese Traditional" ;;
+	"0405") LANG="$LANG - CSY Czech" ;;
+	"0406") LANG="$LANG - DAN Danish" ;;
+	"0413") LANG="$LANG - NLD Dutch" ;;
+	"0409") LANG="$LANG - USA English" ;;
+	"0407") LANG="$LANG - GER German" ;;
+	"0408") LANG="$LANG - ELL Greek" ;;
+	"040b") LANG="$LANG - FIN Finnish" ;;
+	"040c") LANG="$LANG - FRA French" ;;
+	"040e") LANG="$LANG - HUN Hungarian" ;;
+	"0410") LANG="$LANG - ITA Italian" ;;
+	"0411") LANG="$LANG - JPN Japanese" ;;
+	"0412") LANG="$LANG - KOR Korean" ;;
+	"0414") LANG="$LANG - NOR Norwegian" ;;
+	"0415") LANG="$LANG - PLK Polish" ;;
+	"0416") LANG="$LANG - PTB Portuguese Brazil" ;;
+	"0816") LANG="$LANG - PTG Portuguese Portugal" ;;
+	"0418") LANG="$LANG - ROM Romanian" ;;
+	"0419") LANG="$LANG - RUS Russian" ;;
+	"041b") LANG="$LANG - SKY Slovak" ;;
+	"0c0a") LANG="$LANG - ESN Spanish" ;;
+	"041d") LANG="$LANG - SVE Swedish" ;;
+	"041f") LANG="$LANG - TRK Turkish" ;;
+esac
 echo "  $LANG"  >> ~/.lrk/rominfo.txt
 echo >> ~/.lrk/rominfo.txt
 echo "[DPI]" >> ~/.lrk/rominfo.txt
