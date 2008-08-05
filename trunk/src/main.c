@@ -35,7 +35,6 @@ void help_show_message()
 {
         fprintf(stderr, "Usage: HTCFlasher [options]\n\n");
         fprintf(stderr, " options:\n");
-        fprintf(stderr, "    -X [filename]    extract NBH file contents\n");
         fprintf(stderr, "    -F [filename]    flash NBH file\n");
 	fprintf(stderr, "    -D [device]      use another serial device (default: %s)\n", device);
         fprintf(stderr, "    -i               get device info\n");
@@ -51,10 +50,9 @@ int main(int argc, char **argv)
 	int info = 0;
 	int flash = 0;
 	int mtty = 0;
-	int extract = 0;
 	char *NBHfile;
 
-	printf ("=== HTCflasher v3.0\n");
+	printf ("=== HTCflasher v3.1\n");
 	printf ("=== Open source RUU for HTC devices\n");
 	printf ("=== (c) 2007-2008 Pau Oliva Fora\n\n");
 	
@@ -63,12 +61,11 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	while ((c = getopt(argc, argv, "F:D:X:ipvhz")) != -1) {
+	while ((c = getopt(argc, argv, "F:D:Xipvhz")) != -1) {
 		switch(c) {
 		case 'X':
-			NBHfile = optarg;
-			printf ("[] Extract NBH file '%s'\n",NBHfile);
-			extract = 1;
+			fprintf (stderr,"[!!] This option is deprecated. Use 'yang'.\n");
+			return 1;
 			break;
 		case 'D':
 			device = optarg;
@@ -105,11 +102,6 @@ int main(int argc, char **argv)
 	}
 
 	signal(SIGINT, (void (*)(int))control_c);
-
-	if (extract) {
-		extractNBH(NBHfile);
-		return 0;
-	}
 
 	opendev();
 

@@ -36,6 +36,3 @@ int flashNBH(char *flashfile);
 
 /* crc32.c */
 unsigned long Crc32(const unsigned char *data, unsigned long size, unsigned long prev);
-
-/* nbhextract.c */
-void extractNBH(char *filename);

@@ -18,25 +18,12 @@
 #include <getopt.h>
 #include "nbh.h"
 
-unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
-const char magicHeader2[]={'R','0','0','0','F','F','\n'};
-const char initialsignature[]={'X' ,'D' ,'A' ,'-' ,'D' ,'e' ,'v' ,'e' ,'l' ,'o' ,'p' ,'e' ,'r' ,'s' ,'!' ,' ' };
-
-struct HTCIMAGEHEADER {
-	char device[32];
-	unsigned long sectiontypes[32];
-	unsigned long sectionoffsets[32];
-	unsigned long sectionlengths[32];
-	char CID[32];
-	char version[16];
-	char language[16];
-};
-struct HTCIMAGEHEADER HTCIMAGEHEADER;
-
 void help_show_message()
 {
 	fprintf(stderr, "Usage: yang [options]\n\n");
-	fprintf(stderr, " options:\n");
+	fprintf(stderr, " Exctract NBH options:\n");
+	fprintf(stderr, "    -X [filename]       Extract NBH file contents\n\n");
+	fprintf(stderr, " Generate NBH options:\n");
 	fprintf(stderr, "    -F [filename]       Output NBH filename\n");
 	fprintf(stderr, "    -f [file1,file2...] Comma separated list of input NB files\n");
 	fprintf(stderr, "    -t [type1,type2...] Comma separated list of input NB types\n");
@@ -47,6 +34,11 @@ void help_show_message()
 	fprintf(stderr, "    -l [language]       Language\n\n");
 	//fprintf(stderr, "Example:\n");
 	//fprintf(stderr, " yang -F RUU_signed.nbh -f MainSplash.nb,OS.nb -t 0x600,0x400 -s 64 -d KAIS***** -c SuperCID -v 1.0 -l WWE\n");
+#ifdef WIN32
+	// GUI idiot proof ;)
+	fprintf(stderr, "Press ENTER to quit\n\n");
+	getchar();
+#endif
 }
 
 int main(int argc, char **argv)
@@ -62,6 +54,8 @@ int main(int argc, char **argv)
 	char *nbfiles;
 	char *tempnbfiles;
 	char *nbfile;
+	char magicHeader2[]={'R','0','0','0','F','F','\n'};
+	char initialsignature[]={'X' ,'D' ,'A' ,'-' ,'D' ,'e' ,'v' ,'e' ,'l' ,'o' ,'p' ,'e' ,'r' ,'s' ,'!' ,' ' };
 
 	FILE *nbh;
 	FILE *dbh;
@@ -74,14 +68,32 @@ int main(int argc, char **argv)
 	unsigned long signLen;
 	unsigned long totalwrite;
 	unsigned long lps;
+	unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
 
 	unsigned char signature[5000];
 	unsigned char flag;
 
 	struct HTCIMAGEHEADER header;
 
-	printf ("=== yang v1.0: Yet Another NBH Generator\n");
+	printf ("=== yang v1.1: Yet Another NBH Generator\n");
 	printf ("=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers\n\n");
+
+#ifdef WIN32
+	// drag & drop support for win32
+	if (argc == 2) {
+		printf ("[] Extract NBH file '%s'\n",argv[1]);
+		extractNBH(argv[1]);
+		fprintf(stderr, "Press ENTER to quit\n\n");
+		getchar();
+		return 0;
+	}
+#endif
+
+	if ((argc == 3) && !strcmp(argv[1], "-X")) {
+		printf ("[] Extract NBH file '%s'\n",argv[2]);
+		extractNBH(argv[2]);
+		return 0;
+	}
 
 	if (argc < 17) {
 		help_show_message();
