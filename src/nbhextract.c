@@ -14,29 +14,40 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "main.h"
 #include "nbh.h"
 
-unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
-const char magicHeader2[]={'R','0','0','0','F','F','\n'};
+int DEBUG=0;
 
-static unsigned char bmphead[54] = {
-	0x42, 0x4d, 0x36, 0x84, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x00,
-       	0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0xf0, 0x00, 0x00, 0x00, 0x40, 0x01,
-       	0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x84,
-       	0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-struct HTCIMAGEHEADER {
-	char device[32];
-	unsigned long sectiontypes[32];
-	unsigned long sectionoffsets[32];
-	unsigned long sectionlengths[32];
-	char CID[32];
-	char version[16];
-	char language[16];
+static unsigned char bmphead1[18] = {
+	0x42, 0x4d, 		/* signature */
+	0x36, 0x84, 0x03, 0x00, /* size of BMP file in bytes (unreliable) */
+	0x00, 0x00, 0x00, 0x00, /* reserved, must be zero */
+	0x36, 0x00, 0x00, 0x00, /* offset to start of image data in bytes */
+	0x28, 0x00, 0x00, 0x00, /* size of BITMAP INFO HEADER structure, must be 0x28 */
 };
-struct HTCIMAGEHEADER HTCIMAGEHEADER;
+
+unsigned char bmpheadW[4];
+unsigned char bmpheadH[4];
+//	0xf0, 0x00, 0x00, 0x00, /* image width in pixels */
+//	0x40, 0x01, 0x00, 0x00, /* image height in pixels */
+
+static unsigned char bmphead2[8] = {
+	0x01, 0x00,		/* number of planes in the image, must be 1 */
+	0x18, 0x00, 		/* number of bits per pixel (1, 4, 8 or 24) */
+	0x00, 0x00, 0x00, 0x00, /* compression type (0=none, 1=RLE-8, 2=RLE-4) */
+};
+
+//unsigned char bmpheadS[4];
+//	0x00, 0x84, 0x03, 0x00, /* size of image data in bytes (including padding) 0x38400 for 320x240*/ 
+
+static unsigned char bmphead3[16] = {
+	0x00, 0x00, 0x00, 0x00, /* horizontal resolution in pixels per meter (unreliable) */
+	0x00, 0x00, 0x00, 0x00, /* vertical resolution in pixels per meter (unreliable) */
+	0x00, 0x00, 0x00, 0x00, /* number of colors in image, or zero */
+	0x00, 0x00, 0x00, 0x00  /* number of important colors, or zero */
+};
+
+
 
 /* getSectionName - returns the name based on ID */
 const char *getSectionName(unsigned long section)
@@ -66,27 +77,19 @@ const char *getSectionName(unsigned long section)
 	return "unknown";
 }
 
-/* convertBMP - converts a NB splash screen to a bitmap */
-int convertBMP(FILE *input, int index, unsigned long type, unsigned long start, unsigned long len)
+/* convertNB2BMP - converts a NB splash screen to a bitmap */
+int convertNB2BMP(FILE *input, char *filename, int biWidth, int biHeight, unsigned long dataLen, unsigned long start)
 {
-	/* FIXME: image size is hardcoded */
 	FILE *output;
-	int biWidth = 240;
-	int biHeight = 320;
 	int y,x;
-	char filename[1024];
-	unsigned long dataLen = biWidth * biHeight * 2;
-	unsigned char *data[dataLen];
+	char filename2[1024];
 	unsigned char colors[3];
 	unsigned short encoded;
+	unsigned long biSize;
+	unsigned char data[dataLen];
 
-	sprintf(filename, "%02d_%s_0x%03lx.bmp", index, getSectionName(type), type);
-	printf("[] Encoding: %s\n", filename);
-
-	if (len < dataLen) {
-		fprintf(stderr, "[!!] Invalid size\n");
-		return 0;
-	}
+	sprintf(filename2, "%s.bmp", filename);
+	printf("[] Encoding: %s\n", filename2);
 
 	if (fseek(input, start, SEEK_SET) != 0) {
 		fprintf(stderr, "[!!] Could not move to start of image\n");
@@ -95,33 +98,51 @@ int convertBMP(FILE *input, int index, unsigned long type, unsigned long start, 
 
 	if (fread(data, 1, dataLen, input) != dataLen) {
 		fprintf(stderr, "[!!] Could not read full image\n");
-		return 0;
+		return 1;
 	}
 
-	output=fopen(filename,"wb");
+	output=fopen(filename2,"wb");
 	if (output == NULL) {
 		fprintf(stderr, "[!!] Could not open '%s'\n", filename);
-		return 0;
+		return 1;
 	}
 
-	if (fwrite(bmphead, 1, sizeof(bmphead), output) != sizeof(bmphead)) {
-		fprintf(stderr, "[!!] Could not write bitmap header\n");
+	if (fwrite(bmphead1, 1, sizeof(bmphead1), output) != sizeof(bmphead1)) {
+		fprintf(stderr, "[!!] Could not write bitmap header 1\n");
 		fclose(output);
-		return 0;
+		return 1;
+	}
+
+	fwrite(&biWidth, 1, sizeof(biWidth), output);
+	fwrite(&biHeight, 1, sizeof(biHeight), output);
+
+	if (fwrite(bmphead2, 1, sizeof(bmphead2), output) != sizeof(bmphead2)) {
+		fprintf(stderr, "[!!] Could not write bitmap header 2\n");
+		fclose(output);
+		return 1;
+	}
+
+	biSize = biWidth*biHeight*3;
+	fwrite(&biSize, 1, sizeof(biSize), output);
+
+	if (fwrite(bmphead3, 1, sizeof(bmphead3), output) != sizeof(bmphead3)) {
+		fprintf(stderr, "[!!] Could not write bitmap header 3\n");
+		fclose(output);
+		return 1;
 	}
 
 	for (y=0; y < biHeight; y++) {
 		for (x=0; x < biWidth; x++) {
 			encoded = ((unsigned short *)data)[((biHeight-(y+1))*biWidth)+x];
-			colors[0] = (encoded << 3) & 0xF8;
-			colors[1] = (encoded >> 3) & 0xFC;
-			colors[2] = (encoded >> 8) & 0xF8;
+			colors[0] = (encoded << 3) & 0xF8; // 11111000b  take only 5 bytes
+			colors[1] = (encoded >> 3) & 0xFC; // 11111100b  take only 6 bytes
+			colors[2] = (encoded >> 8) & 0xF8; // 11111000b  take only 5 bytes
 			fwrite(colors, 1, 3, output);
 		}
 	}
 
 	fclose(output);
-	return 1;
+	return 0;
 }
 
 /* isSectionImage - returns true if section type is splash screen */
@@ -138,6 +159,9 @@ int isSectionImage(unsigned long type)
 int extractNB(FILE *input, int index, unsigned long type, unsigned long start, unsigned long len)
 {
 	int retval=0;
+	int biWidth;
+	int biHeight;
+	unsigned long dataLen;
 	char filename[1024];
 	FILE *output;
 
@@ -158,8 +182,28 @@ int extractNB(FILE *input, int index, unsigned long type, unsigned long start, u
 
 	fclose(output);
 
-	if (isSectionImage(type))
-		convertBMP(input, index, type, start, len);
+	if (isSectionImage(type)) {
+
+		switch (len) {
+			case 262144: 
+			case 153600: 
+				biWidth = 240;
+				biHeight = 320;
+			break;
+			case 655360:
+			case 614912:
+				biWidth = 480;
+				biHeight = 640;
+			break;
+			default:
+				fprintf(stderr, "[!!] Could not determine NB image Width and Height.\n");
+				return 0;
+			break;
+		}
+
+		dataLen = biWidth * biHeight * 2;
+		convertNB2BMP(input, filename, biWidth, biHeight, dataLen, start);
+	}
 
 	return retval;
 }
@@ -172,17 +216,18 @@ void extractNBH(char *filename)
 	FILE *output;
 	FILE *tmpfile;
 	char magic[5000];
+	char magicHeader2[]={'R','0','0','0','F','F','\n'};
 	unsigned char signature[16];
 	unsigned long blockIndex = 0;
 	unsigned long offset = 0;
 	unsigned long blockLen;
 	unsigned long signLen;
+	unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
 	unsigned char flag;
 	unsigned char blockSign[5000];
 	struct HTCIMAGEHEADER header;
 
 	/* NBH2DBH */
-	zenity(5);
 	input = fopen(filename,"rb");
 	if (input == NULL) {
 		fprintf(stderr, "[!!] Could not open '%s'\n", filename);
@@ -213,7 +258,6 @@ void extractNBH(char *filename)
 			printf("%02X", signature[i]);
 		printf("\n");
 	}
-	zenity(10);
 
 	output=fopen("tempfile.dbh","wb");
 	if (output == NULL) {
@@ -261,7 +305,6 @@ void extractNBH(char *filename)
 	}
 	fclose(output);
 	fclose(input);
-	zenity(30);
 
 	/* DBHExtract */
 	tmpfile = fopen("tempfile.dbh", "rb");
@@ -295,21 +338,17 @@ void extractNBH(char *filename)
 	printf("Version:  %s\n", header.version);
 	printf("Language: %s\n", header.language);
 	printf("\n");
-	zenity(50);
 
 	for (i = 0; i < (sizeof(header.sectiontypes) / sizeof(header.sectiontypes[0])); i++) {
 		if (i+50 < 95)
-			zenity(50+i);
 		if (header.sectiontypes[i]!=0) {
 			if (!extractNB(tmpfile, i, header.sectiontypes[i], header.sectionoffsets[i], header.sectionlengths[i]))
 				fprintf(stderr,"[!!] Error while extracting file %d\n", i);
 		}
 	}
 
-	zenity(95);
 	printf ("[] Done!\n");
 
 	fclose(tmpfile);
 	unlink("tempfile.dbh");
-	zenity(100);
 }

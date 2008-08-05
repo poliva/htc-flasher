@@ -6,7 +6,7 @@ LDFLAGS=-m32
 
 all: ${OBJ}
 	${CC} $(CFLAGS) $(LDFLAGS) ${OBJ} -o ${BIN}
-	${CC} $(CFLAGS) $(LDFLAGS) nbh.o yang.c -o yang
+	${CC} $(CFLAGS) $(LDFLAGS) nbhextract.o nbh.o yang.c -o yang
 
 clean:
 	-rm -f ${OBJ} ${BIN} yang

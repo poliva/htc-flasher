@@ -50,7 +50,7 @@ case $1 in
 		echo "Extracting NB from $2"
 		mkdir -p ~/LRK/NBH/
 		cd ~/LRK/NBH/
-		/usr/bin/HTCFlasher -X "$2" > ~/.lrk/lrk.log 2>&1
+		/usr/bin/yang -X "$2" > ~/.lrk/lrk.log 2>&1
 	;;
 	"-packages")
 		echo "Adding Custom Packages to ROM"
