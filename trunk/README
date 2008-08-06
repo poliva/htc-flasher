@@ -42,7 +42,6 @@
  * HTC Herald
  * HTC Athena
  * HTC Vogue
- * HTC Diamond
  * HTC Titan
  * HTC Gene
  * HTC Pharaos
@@ -86,3 +85,12 @@
     * Generate NBH files: replaces windows tools like htcrt
     * Extract NBH files: replaces windows tools like nbhextract
 
+
+ INSTALLATION
+ ============
+ 
+ To compile from sources run 'make'.
+ To install run 'make install' as root.
+ To uninstall run 'make remove' as root.
+
+ For Linux ROM Kitchen, see the file RomKitchen/README.lrk 
