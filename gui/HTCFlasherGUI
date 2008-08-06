@@ -39,7 +39,7 @@ options() {
 		FLA="$FLA -v"
 	fi
 
-	ans=$($ZEN --width 500 --height 360 --list  --text "HTCFlasher v3.0\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "" FALSE "$OPT2" "$generated" FALSE "$OPT3" "$flashed" FALSE "$OPT4" "$devinfo" FALSE "$OPT5" "" FALSE "$OPT6" "[ $device ]" FALSE "$OPT7" "[ $debug ]" FALSE "$OPT8" "$donate")
+	ans=$($ZEN --width 500 --height 360 --list  --text "HTCFlasher v3.1\nOpen Source RUU for HTC devices\n(c) 2007-2008 Pau Oliva Fora" --radiolist --column "" --column "Option" --column "" TRUE "$OPT1" "" FALSE "$OPT2" "$generated" FALSE "$OPT3" "$flashed" FALSE "$OPT4" "$devinfo" FALSE "$OPT5" "" FALSE "$OPT6" "[ $device ]" FALSE "$OPT7" "[ $debug ]" FALSE "$OPT8" "$donate")
 
 	if [ -z "$ans" ]; then
 		echo "bye :)"
