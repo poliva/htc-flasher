@@ -21,7 +21,6 @@ Not tested, but know to work on:
   * HTC Herald
   * HTC Athena
   * HTC Vogue
-  * HTC Diamond
   * HTC Titan
   * HTC Gene
   * HTC Pharaos
