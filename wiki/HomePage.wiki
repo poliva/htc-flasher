@@ -1,13 +1,13 @@
 = HTCFlasher =
 
-*HTCFlasher* -formerly known as HERMflasher- is an open source tool which allows you to flash ROMs on most current HTC devices. It has some extra features that the original HTC RUU doesn't have, like for example it can present a serial prompt to the bootloader (replacing mtty), or it can dump NBH file contents (.nb ROM parts).
+*HTCFlasher* -formerly known as HERMflasher- is an open source tool which allows you to flash ROMs on most current HTC devices. It has some extra features that the original HTC RUU doesn't have, like for example it can present a serial prompt to the bootloader (replacing mtty).
 
  * [HTCFlasher HTCFlasher wiki page]
 
 
 = YANG =
 
-*YANG* is Yet Another NBH Generator. A tool that allows you to generate custom NBH files out of ROM parts (.nb) files. You can choose the CID, ModelID, Language, etc. and also adjust the NBH signature size, thus making valid NBHs for all HTC devices. You need a way to flash custom/cooked ROMs (ie: HardSPL, USPL, SSPL, JumpSPL, etc...) to flash NBH files generated with YANG.
+*YANG* is Yet Another NBH Generator. A tool that allows you to generate custom NBH files out of ROM parts (.nb) files. You can choose the CID, ModelID, Language, etc. and also adjust the NBH signature size, thus making valid NBHs for all HTC devices. You need a way to flash custom/cooked ROMs (ie: HardSPL, USPL, SSPL, JumpSPL, etc...) to flash NBH files generated with YANG. YANG can also dump NBH file contents (.nb ROM parts), this is a command line replacement for windows tools like nbhextract or htcrt.
 
  * [YANG YANG wiki page]
 
