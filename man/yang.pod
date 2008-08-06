@@ -6,6 +6,10 @@ yang - Yet Another NBH Generator
 
 yang -F <filename> -f <file1,file2,...> -t <type1,type2,...> -s <chunksize> -d <device> -c <CID> -v <version> -l <language>
 
+or
+
+yang -X <filename>
+
 
 =head1 DESCRIPTION
 
@@ -16,7 +20,17 @@ you'll need a method to bypass signature checking on your device bootloader.
 This is typically done using methods such as HardSPL, JumpSPL, USPL, etc. as
 published in xda-developers.com forum.
 
+Yang can also be used to extract the contents (ROM parts) found inside a NBH
+file. If the NBH contains a NB splash screen, it will also be converted to
+BMP format.
+
 =head1 OPTIONS
+
+=head2 Extract NBH Options:
+
+B<-X> Input NBH file name.
+
+=head2 Generate NBH Options:
 
 All options are mandatory. 
 
@@ -72,19 +86,23 @@ for each file from the extracted file names.
 
 =head1 EXAMPLES
 
+Extract the contents from a NBH file:
+
+	yang -X RUU_signed.nbh
+
 Generate a NBH file containing only a Splash Screen, valid for any HTC Kaiser device:
 
-          yang -F RUU_signed.nbh -t 0x600 -f 00_MainSplash_0x600.nb -s 64 -d KAIS***** -c 11111111 -v 1.0 -l WWE
+	yang -F RUU_signed.nbh -t 0x600 -f 00_MainSplash_0x600.nb -s 64 -d KAIS***** -c 11111111 -v 1.0 -l WWE
 
 Generate a NBH file containing a GSM radio firmware, an SPL, a Splash Screen and a WinCE OS image, valid for HTC Shift devices with CID HTC__017:
 
-          yang -F RUU_signed.nbh -t 0x301,0x200,0x600,0x400 -f GSM.nb,SPL.nb,Splash.nb,OS.nb -s 64 -d CLIO10000 -c HTC__017 -v 1.30.453.0 -l USA
+	yang -F RUU_signed.nbh -t 0x301,0x200,0x600,0x400 -f GSM.nb,SPL.nb,Splash.nb,OS.nb -s 64 -d CLIO10000 -c HTC__017 -v 1.30.453.0 -l USA
 
 Generate a NBH file containing IPL, SPL, MainSplash, GSM, OS and unknown(0x800) files, for HTC Excalibur device:
 
 	yang -F RUU_signed.nbh -f 00_IPL_0x100.nb,01_SPL_0x200.nb,02_MainSplash_0x600.nb,03_GSM_0x300.nb,04_OS_0x400.nb,05_unknown_0x800.nb -t 0x100,0x200,0x600,0x300,0x400,0x800 -s 1024 -d EXCA20000 -c HTC__001 -v 1.11.405.4 -l ENG
 
-	=== yang v1.0: Yet Another NBH Generator
+	=== yang v1.1: Yet Another NBH Generator
 	=== (c) 2008 Pau Oliva Fora - pof @ XDA-Developers
 
 	[] Output NBH file: RUU_unsigned.nbh
