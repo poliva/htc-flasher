@@ -11,33 +11,22 @@ Currently most new HTC devices are supported, and the basic set of functions to 
 For an incomplete list, see [SupportedDevices].
 
 
-= Supported Operating Systems =
-
-  * GNU/Linux x86 and x86_64
-  * Win32/Cygwin (except Vista)
-  * Mac OS X (intel based)
-
-
 = Features =
 
   * Flash NBH files: replaces the Windows Rom Upgrade Utility (RUU)
-  * Extract NBH files: replaces windows tools like nbhextract
-  * Generate NBH files using [YANG YANG: Yet Another NBH Generator]
-  * Convert splash screens to BMP
   * Serial prompt: replaces mtty / minicom
   * Easy to use Gtk GUI
 
 = Comand Line Mode =
 
 {{{
-=== HTCflasher v3.0
+=== HTCflasher v3.1
 === Open source RUU for HTC devices
 === (c) 2007-2008 Pau Oliva Fora
 
 Usage: HTCFlasher [options]
 
  options:
-    -X [filename]    extract NBH file contents
     -F [filename]    flash NBH file
     -D [device]      use another serial device (default: /dev/ttyUSB0)
     -i               get device info
