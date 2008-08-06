@@ -4,7 +4,7 @@ HTCFlasher - Rom Update Utility (RUU) for HTC based devices
 
 =head1 SYNOPSIS
 
-HTCFlasher [-h] [-D device] [-X file] [-F file] [-i] [-v] [-p]
+HTCFlasher [-h] [-D device] [-F file] [-i] [-v] [-p]
 
 =head1 DESCRIPTION
 
@@ -19,16 +19,13 @@ ipaq kernel module.
 
 Once the device is recognized, you can connect to the bootloader
 and issue commands, flash a new ROM upgrade, or get device
-information. You can also extract the contents of the ROM upgrade
-file before flashing it, to examine what you are going to flash.
+information. 
 
 =head1 OPTIONS
 
 B<-h> display a short help text
 
 B<-D> use the given device instead of /dev/ttyUSB0
-
-B<-X> Extract the contents of a NBH upgrade file
 
 B<-F> Flash a NBH upgrade file to the device
 
@@ -49,10 +46,6 @@ Get device information:
 Flash a NBH upgrade file in verbose mode:
 
           HTCFlasher -v -F RUU_signed.nbh
-
-Extract ROM contents from a NBH upgrade file:
-
-          HTCFlasher -X RUU_signed.nbh
 
 =head1 EXIT STATUS
 
@@ -75,4 +68,4 @@ This is free software: you are free to change and redistribute it.  There is NO 
 
 =head1 SEE ALSO
 
-HTCFlasherGUI(1)
+HTCFlasherGUI(1), yang(1)

@@ -21,3 +21,10 @@ Q3. HTCFlasher version 2.0 was able to dump NAND using 'rbmc'.
 A3. The 'rbmc' command is not present on most new SPL versions. And the
     resulting dumped file was not useful to flash again.
 
+
+Q4. HTCFlasher version 3.0 had win32 support. Why 3.1 doesn't?
+
+A4. The win32 support was experimental and never worked as it should.
+    The only useful feature of HTCFlasher for win32 was NBH extracting,
+    this has now been merged into yang, and win32 native binaries for
+    yang are provided in the download page.

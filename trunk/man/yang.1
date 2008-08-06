@@ -129,12 +129,16 @@
 .\" ========================================================================
 .\"
 .IX Title "yang 1"
-.TH yang 1 "2008-07-08" "yang v1.0" "User commands"
+.TH yang 1 "2008-08-06" "yang v1.1" "User commands"
 .SH "NAME"
 yang \- Yet Another NBH Generator
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 yang \-F <filename> \-f <file1,file2,...> \-t <type1,type2,...> \-s <chunksize> \-d <device> \-c <\s-1CID\s0> \-v <version> \-l <language>
+.PP
+or
+.PP
+yang \-X <filename>
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 Yang is a tool that allows to create custom \s-1NBH\s0 files from \s-1NB\s0 \s-1ROM\s0 parts.
@@ -143,8 +147,17 @@ The \s-1NBH\s0 files created using yang are not signed with the \s-1HTC\s0 certi
 you'll need a method to bypass signature checking on your device bootloader.
 This is typically done using methods such as HardSPL, JumpSPL, \s-1USPL\s0, etc. as
 published in xda\-developers.com forum.
+.PP
+Yang can also be used to extract the contents (\s-1ROM\s0 parts) found inside a \s-1NBH\s0
+file. If the \s-1NBH\s0 contains a \s-1NB\s0 splash screen, it will also be converted to
+\&\s-1BMP\s0 format.
 .SH "OPTIONS"
 .IX Header "OPTIONS"
+.Sh "Extract \s-1NBH\s0 Options:"
+.IX Subsection "Extract NBH Options:"
+\&\fB\-X\fR Input \s-1NBH\s0 file name.
+.Sh "Generate \s-1NBH\s0 Options:"
+.IX Subsection "Generate NBH Options:"
 All options are mandatory. 
 .PP
 \&\fB\-F\fR Output \s-1NBH\s0 file name.
@@ -197,16 +210,22 @@ first extract the \s-1NBH\s0 file from a shipped \s-1ROM\s0 and get the header t
 for each file from the extracted file names.
 .SH "EXAMPLES"
 .IX Header "EXAMPLES"
+Extract the contents from a \s-1NBH\s0 file:
+.PP
+.Vb 1
+\&        yang \-X RUU_signed.nbh
+.Ve
+.PP
 Generate a \s-1NBH\s0 file containing only a Splash Screen, valid for any \s-1HTC\s0 Kaiser device:
 .PP
 .Vb 1
-\&          yang \-F RUU_signed.nbh \-t 0x600 \-f 00_MainSplash_0x600.nb \-s 64 \-d KAIS***** \-c 11111111 \-v 1.0 \-l WWE
+\&        yang \-F RUU_signed.nbh \-t 0x600 \-f 00_MainSplash_0x600.nb \-s 64 \-d KAIS***** \-c 11111111 \-v 1.0 \-l WWE
 .Ve
 .PP
 Generate a \s-1NBH\s0 file containing a \s-1GSM\s0 radio firmware, an \s-1SPL\s0, a Splash Screen and a WinCE \s-1OS\s0 image, valid for \s-1HTC\s0 Shift devices with \s-1CID\s0 HTC_\|_017:
 .PP
 .Vb 1
-\&          yang \-F RUU_signed.nbh \-t 0x301,0x200,0x600,0x400 \-f GSM.nb,SPL.nb,Splash.nb,OS.nb \-s 64 \-d CLIO10000 \-c HTC__017 \-v 1.30.453.0 \-l USA
+\&        yang \-F RUU_signed.nbh \-t 0x301,0x200,0x600,0x400 \-f GSM.nb,SPL.nb,Splash.nb,OS.nb \-s 64 \-d CLIO10000 \-c HTC__017 \-v 1.30.453.0 \-l USA
 .Ve
 .PP
 Generate a \s-1NBH\s0 file containing \s-1IPL\s0, \s-1SPL\s0, MainSplash, \s-1GSM\s0, \s-1OS\s0 and unknown(0x800) files, for \s-1HTC\s0 Excalibur device:
@@ -216,7 +235,7 @@ Generate a \s-1NBH\s0 file containing \s-1IPL\s0, \s-1SPL\s0, MainSplash, \s-1GS
 .Ve
 .PP
 .Vb 2
-\&        === yang v1.0: Yet Another NBH Generator
+\&        === yang v1.1: Yet Another NBH Generator
 \&        === (c) 2008 Pau Oliva Fora \- pof @ XDA\-Developers
 .Ve
 .PP
