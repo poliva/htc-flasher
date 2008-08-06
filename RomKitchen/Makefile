@@ -24,7 +24,6 @@ install:
 	cp lrk-scripts /usr/share/LinuxRomKitchen/
 	cp lrk-preload /usr/share/LinuxRomKitchen/
 	cp lrk.svg /usr/share/LinuxRomKitchen/
-	cp inff.end /usr/share/LinuxRomKitchen/
 	cp lrk.desktop /usr/share/applications/
 
 clean:
