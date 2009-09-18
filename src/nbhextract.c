@@ -68,12 +68,24 @@ const char *getSectionName(unsigned long section)
 		return "GSM";
 	if (section == 0x400 || section == 0x401)
 		return "OS";
+	if (section == 0x500)
+		return "DIAG";
 	if (section == 0x600)
 		return "MainSplash";
 	if (section == 0x601)
 		return "SubSplash";
 	if (section == 0x700 || section == 0x900)
 		return "ExtROM";
+	if (section == 0xB05)
+		return "Recovery";
+	if (section == 0xB06)
+		return "UserData";
+	if (section == 0xB04)
+		return "LinuxBoot";
+	if (section == 0xB02)
+		return "LinuxSystem";
+	if (section == 0xA00)
+		return "MCPLD";
 	return "unknown";
 }
 
