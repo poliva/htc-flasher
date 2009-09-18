@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include "nbh.h"
 
-int DEBUG=0;
+int DEBUG=1;
 
 static unsigned char bmphead1[18] = {
 	0x42, 0x4d, 		/* signature */
@@ -229,11 +229,12 @@ void extractNBH(char *filename)
 	FILE *tmpfile;
 	char magic[5000];
 	char magicHeader2[]={'R','0','0','0','F','F','\n'};
-	unsigned char signature[16];
+	unsigned char signature[500];
 	unsigned long blockIndex = 0;
 	unsigned long offset = 0;
 	unsigned long blockLen;
 	unsigned long signLen;
+	unsigned long initsign;
 	unsigned long magicHeader[]={'H','T','C','I','M','A','G','E'};
 	unsigned char flag;
 	unsigned char blockSign[5000];
@@ -247,18 +248,24 @@ void extractNBH(char *filename)
 	}
 
 	if (fread(magic, 1, sizeof(magicHeader2), input) != sizeof(magicHeader2)) {
-		fprintf(stderr, "[!!] '%s' is not a valid NBH file\n",filename);
+		fprintf(stderr, "[!!] '%s' is not a valid NBH file1\n",filename);
 		fclose(input);
 		exit(1);
 	}
 
 	if (memcmp(magicHeader2, magic, sizeof(magicHeader2)) != 0) {
-		fprintf(stderr, "[!!] '%s' is not a valid NBH file\n",filename);
-		fclose(input);
-		exit(1);
+		//fprintf(stderr, "[!!] '%s' is not a valid NBH file2\n",filename);
+		//fclose(input);
+		//exit(1);
+		// NEW FORMAT
+		initsign = 240;
+	} else {
+		// OLD format
+		initsign = 16;
 	}
+	if (DEBUG) printf("initsign: %ld\n",initsign);
 
-	if (fread(signature, 1, 16, input) != 16) {
+	if (fread(signature, 1, initsign, input) != initsign) {
 		fprintf(stderr, "[!!] Could not read initial signature\n");
 		fclose(input);
 		exit(1);
@@ -266,8 +273,8 @@ void extractNBH(char *filename)
 
 	if (DEBUG) {
 		printf("Initial signature: ");
-		for (i = 0; i < 16; i++)
-			printf("%02X", signature[i]);
+		for (i = 0; i < initsign; i++)
+			printf("%02X ", signature[i]);
 		printf("\n");
 	}
 
@@ -284,6 +291,8 @@ void extractNBH(char *filename)
 	while (!feof(input)) {
 
 		if (fread(&blockLen, 4, 1, input) && fread(&signLen, 4, 1, input) && fread(&flag, 1, 1, input)) {
+
+			if (DEBUG) printf("blockLen: %08lX\nsignLen: %08lX\nflag: %i", blockLen, signLen, flag);
 
 			if (!bufferedReadWrite(input, output, blockLen)) {
 				fprintf(stderr, "[!!] Error in block %ld (%08lX - %08lX)\n", blockIndex, offset, offset + blockLen);
