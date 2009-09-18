@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include "nbh.h"
 
-int DEBUG=1;
+int DEBUG=0;
 
 static unsigned char bmphead1[18] = {
 	0x42, 0x4d, 		/* signature */
@@ -287,15 +287,20 @@ void extractNBH(char *filename)
 
 	blockIndex = 0;
 	offset = 0;
+	
 
 	while (!feof(input)) {
 
 		if (fread(&blockLen, 4, 1, input) && fread(&signLen, 4, 1, input) && fread(&flag, 1, 1, input)) {
 
-			if (DEBUG) printf("blockLen: %08lX\nsignLen: %08lX\nflag: %i", blockLen, signLen, flag);
+			if (DEBUG) printf("blockLen: %08lX\nsignLen: %08lX\nflag: %i\n", blockLen, signLen, flag);
 
+			if (initsign!=16 && blockIndex==0) {
+				printf("[] Android NBH detected, adjusting first block length.\n");
+				blockLen=999999999;
+			}
 			if (!bufferedReadWrite(input, output, blockLen)) {
-				fprintf(stderr, "[!!] Error in block %ld (%08lX - %08lX)\n", blockIndex, offset, offset + blockLen);
+				if (initsign!=16 && blockIndex!=0) fprintf(stderr, "[!!] Error in block %ld (%08lX - %08lX)\n", blockIndex, offset, offset + blockLen);
 				break;
 			}
 
@@ -362,7 +367,7 @@ void extractNBH(char *filename)
 
 	for (i = 0; i < (sizeof(header.sectiontypes) / sizeof(header.sectiontypes[0])); i++) {
 		if (i+50 < 95)
-		if (header.sectiontypes[i]!=0) {
+		if (header.sectiontypes[i]!=0 && i!=31) {
 			if (!extractNB(tmpfile, i, header.sectiontypes[i], header.sectionoffsets[i], header.sectionlengths[i]))
 				fprintf(stderr,"[!!] Error while extracting file %d\n", i);
 		}
@@ -371,5 +376,5 @@ void extractNBH(char *filename)
 	printf ("[] Done!\n");
 
 	fclose(tmpfile);
-	unlink("tempfile.dbh");
+	if (!DEBUG) unlink("tempfile.dbh");
 }
